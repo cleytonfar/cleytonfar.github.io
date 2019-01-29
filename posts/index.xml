@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Cleyton Farias</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Cleyton Farias</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 23 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Julia for Data Science</title>
+      <link>/posts/using-julia-for-data-science/</link>
+      <pubDate>Wed, 23 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/using-julia-for-data-science/</guid>
+      <description>This a quick introduction to the Julia programming language and will be presented to you how you can work rightaway with datasets with Julia.
+Why Julia? Julia is a high level programming language released in 2012 by a team of MIT researchers. Since its beginning, the aim was to solve the so called two-language programing problem: easy to use functionalities of interpretable languages (Python, R, Matlab) vs high performance of compiled languages (C, C++, Fortran).</description>
+    </item>
+    
+  </channel>
+</rss>

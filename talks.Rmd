@@ -1,0 +1,13 @@
+---
+title: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Presentations
+
+1. *"Commodity prices and business cycles in emerging economies: The role of news shocks"*, presented at: **The 39th Annual Brazilian Econometric Society Meeting 2017**; **The 22nd Annual LACEA Meeting 2017**.
+

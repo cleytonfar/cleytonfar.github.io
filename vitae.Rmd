@@ -1,0 +1,16 @@
+---
+title: ''
+date: "2018-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+<embed src="/cleyton_vitae.pdf" width="100%" height="2100px" />
+
+<!-- <object data="/cleyton_vitae.pdf" type="application/pdf" width="100%" height="2100px"> -->
+<!--   <p>Alternative text - include a link <a href="/cleyton_vitae.pdf">to the PDF!</a></p> -->
+<!-- </object> -->
