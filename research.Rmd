@@ -16,5 +16,5 @@ knitr::opts_chunk$set(echo = TRUE, cache = T)
 <a href="https://sites.google.com/view/brenosampaio/personal-info" target="_blank">Breno Sampaio</a>. Work in Progress, January 2019.
 
 
-2. *"Commodity prices and business cycles in emerging economies: The role of news shocks"*, with <a href="https://sites.google.com/site/marceloeasilva/" target="_blank">Marcelo Eduardo A. da Silva</a>. Working Paper, July 2017. [[Preliminary draft]](https://github.com/cleytonfar/cleytonfar.github.io/blob/master/pdf/news_shocks.pdf?raw=true)
+2. *"Commodity prices and business cycles in emerging economies: The role of news shocks"*, with <a href="https://sites.google.com/site/marceloeasilva/" target="_blank">Marcelo Eduardo A. da Silva</a>. Working Paper, July 2017.
 
