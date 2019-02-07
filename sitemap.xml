@@ -3,13 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/about/</loc>
-    <lastmod>2019-01-28T00:00:00+00:00</lastmod>
+    <loc>/posts/using-julia-for-data-science/</loc>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/posts/using-julia-for-data-science/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <loc>/about/</loc>
+    <lastmod>2019-01-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -33,37 +33,37 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-01-28T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/data-science/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/julia/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/julia/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/posts/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

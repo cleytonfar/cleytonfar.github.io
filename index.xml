@@ -6,10 +6,20 @@
     <description>Recent content on Cleyton Farias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 11 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Julia for Data Science </title>
+      <link>/posts/using-julia-for-data-science/</link>
+      <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/using-julia-for-data-science/</guid>
+      <description>This a quick introduction to the Julia programming language. The aim of this post is to present to you how you can easily install and work rightaway with datasets with Julia.
+Why Julia? Glad you asked! Julia is a high level programming language released in 2012 by a team of MIT researchers. Since its beginning, the aim was to solve the so called two-language programing problem: easy to use functionalities of interpretable languages (Python, R, Matlab) vs high performance of compiled languages (C, C++, Fortran).</description>
+    </item>
     
     <item>
       <title>About Me</title>
@@ -21,16 +31,6 @@
 I&amp;rsquo;m very passionate about technologies, computers and data. I spend most my time in front of my computer working on a dataset or learning coding instead of studying for exams (kkkkkkk).
 My main interests relies on data analysis, specially machine learnign, big data, and econometrics.
 Thanks for stepping by!</description>
-    </item>
-    
-    <item>
-      <title>Using Julia for Data Science</title>
-      <link>/posts/using-julia-for-data-science/</link>
-      <pubDate>Wed, 23 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/using-julia-for-data-science/</guid>
-      <description>This a quick introduction to the Julia programming language. The aim of this post is to present to you how you can easily install and work rightaway with datasets with Julia.
-Why Julia? Glad you asked! Julia is a high level programming language released in 2012 by a team of MIT researchers. Since its beginning, the aim was to solve the so called two-language programing problem: easy to use functionalities of interpretable languages (Python, R, Matlab) vs high performance of compiled languages (C, C++, Fortran).</description>
     </item>
     
     <item>
