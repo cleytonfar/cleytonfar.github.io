@@ -8,22 +8,23 @@
   </url>
   
   <url>
-    <loc>/about/</loc>
-    <lastmod>2019-01-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/vitae/</loc>
-    <lastmod>2018-02-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/research/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/talks/</loc>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/vitae/</loc>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
+    <lastmod>2019-01-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>

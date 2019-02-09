@@ -22,31 +22,9 @@ Why Julia? Glad you asked! Julia is a high level programming language released i
     </item>
     
     <item>
-      <title>About Me</title>
-      <link>/about/</link>
-      <pubDate>Mon, 28 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/about/</guid>
-      <description>Hello World!!! My name is Cleyton and I&amp;rsquo;m a Data Scientist and Ph.D. Candidate in Economics at Universidade Federal de Pernambuco here in Brazil.
-I&amp;rsquo;m very passionate about technologies, computers and data. I spend most my time in front of my computer working on a dataset or learning coding instead of studying for exams (kkkkkkk).
-My main interests relies on data analysis, specially machine learnign, big data, and econometrics.
-Thanks for stepping by!</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/vitae/</link>
-      <pubDate>Wed, 07 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/vitae/</guid>
-      <description> -- Alternative text - include a link to the PDF!
--- -- </description>
-    </item>
-    
-    <item>
       <title></title>
       <link>/research/</link>
-      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/research/</guid>
       <description> Work in Progress 
@@ -58,11 +36,33 @@ Thanks for stepping by!</description>
     <item>
       <title></title>
       <link>/talks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/talks/</guid>
       <description> Presentations 
 “Commodity prices and business cycles in emerging economies: The role of news shocks”, presented at: The 39th Annual Brazilian Econometric Society Meeting 2017; The 22nd Annual LACEA Meeting 2017.   </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/vitae/</link>
+      <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/vitae/</guid>
+      <description> -- Alternative text - include a link to the PDF!
+-- -- </description>
+    </item>
+    
+    <item>
+      <title>About Me</title>
+      <link>/about/</link>
+      <pubDate>Mon, 28 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>Hello World!!! My name is Cleyton and I&amp;rsquo;m a Data Scientist and Ph.D. Candidate in Economics at Universidade Federal de Pernambuco here in Brazil.
+I&amp;rsquo;m very passionate about technologies, computers and data. I spend most my time in front of my computer working on a dataset or learning coding instead of studying for exams (kkkkkkk).
+My main interests relies on data analysis, specially machine learnign, big data, and econometrics.
+Thanks for stepping by!</description>
     </item>
     
   </channel>
