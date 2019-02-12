@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cleyton Farias</title>
-    <link>http://cleytonfar.github.io/</link>
+    <link>/</link>
     <description>Recent content on Cleyton Farias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 11 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-        <atom:link href="http://cleytonfar.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using Julia for Data Science </title>
-      <link>http://cleytonfar.github.io/posts/using-julia-for-data-science/</link>
+      <link>/posts/using-julia-for-data-science/</link>
       <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://cleytonfar.github.io/posts/using-julia-for-data-science/</guid>
+      <guid>/posts/using-julia-for-data-science/</guid>
       <description>
 
 
@@ -56,7 +56,7 @@ time of this writting, the &lt;strong&gt;Current stable release&lt;/strong&gt; i
 &lt;strong&gt;Long-term support release&lt;/strong&gt; is &lt;strong&gt;v1.0.3&lt;/strong&gt;. Once you downloaded and execute
 the binaries, you will see the following window:&lt;/p&gt;
 &lt;center&gt;
-&lt;img src=&#34;http://cleytonfar.github.io/posts/julia.png&#34; width=&#34;500&#34; /&gt;
+&lt;img src=&#34;/posts/julia.png&#34; width=&#34;500&#34; /&gt;
 &lt;/center&gt;
 &lt;p&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;p&gt;Another options is to use Julia in the browser on &lt;a href=&#34;https://juliabox.com/&#34;&gt;JuliaBox.com&lt;/a&gt;
@@ -913,10 +913,10 @@ you might face.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>http://cleytonfar.github.io/research/</link>
+      <link>/research/</link>
       <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://cleytonfar.github.io/research/</guid>
+      <guid>/research/</guid>
       <description>
 
 
@@ -934,10 +934,10 @@ you might face.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>http://cleytonfar.github.io/talks/</link>
+      <link>/talks/</link>
       <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://cleytonfar.github.io/talks/</guid>
+      <guid>/talks/</guid>
       <description>
 
 
@@ -953,26 +953,26 @@ you might face.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>http://cleytonfar.github.io/vitae/</link>
+      <link>/vitae/</link>
       <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://cleytonfar.github.io/vitae/</guid>
+      <guid>/vitae/</guid>
       <description>
 
 
-&lt;embed src=&#34;http://cleytonfar.github.io/documents/cleyton_vitae.pdf&#34; width=&#34;100%&#34; height=&#34;2100px&#34; /&gt;
+&lt;embed src=&#34;/documents/cleyton_vitae.pdf&#34; width=&#34;100%&#34; height=&#34;2100px&#34; /&gt;
 &lt;!-- &lt;object data=&#34;/cleyton_vitae.pdf&#34; type=&#34;application/pdf&#34; width=&#34;100%&#34; height=&#34;2100px&#34;&gt; --&gt;
-&lt;!--   &lt;p&gt;Alternative text - include a link &lt;a href=&#34;http://cleytonfar.github.io/cleyton_vitae.pdf&#34;&gt;to the PDF!&lt;/a&gt;&lt;/p&gt; --&gt;
+&lt;!--   &lt;p&gt;Alternative text - include a link &lt;a href=&#34;/cleyton_vitae.pdf&#34;&gt;to the PDF!&lt;/a&gt;&lt;/p&gt; --&gt;
 &lt;!-- &lt;/object&gt; --&gt;
 </description>
     </item>
     
     <item>
       <title>About Me</title>
-      <link>http://cleytonfar.github.io/about/</link>
+      <link>/about/</link>
       <pubDate>Mon, 28 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://cleytonfar.github.io/about/</guid>
+      <guid>/about/</guid>
       <description>&lt;p&gt;Hello World!!! My name is Cleyton and I&amp;rsquo;m a Data Scientist and Ph.D. Candidate in
 Economics at Universidade Federal de Pernambuco here in Brazil.&lt;/p&gt;
 
