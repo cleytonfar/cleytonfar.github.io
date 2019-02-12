@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 11 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/julia/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/categories/julia/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,8 +17,898 @@
       <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/posts/using-julia-for-data-science/</guid>
-      <description>This a quick introduction to the Julia programming language. The aim of this post is to present to you how you can easily install and work rightaway with datasets with Julia.
-Why Julia? Glad you asked! Julia is a high level programming language released in 2012 by a team of MIT researchers. Since its beginning, the aim was to solve the so called two-language programing problem: easy to use functionalities of interpretable languages (Python, R, Matlab) vs high performance of compiled languages (C, C++, Fortran).</description>
+      <description>
+
+
+&lt;p&gt;This a quick introduction to the Julia programming language. The aim of this post
+is to present to you how you can easily install and work rightaway with
+datasets with Julia.&lt;/p&gt;
+&lt;div id=&#34;why-julia&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Why Julia?&lt;/h1&gt;
+&lt;p&gt;Glad you asked! Julia is a high level programming language released in 2012 by a
+team of MIT researchers. Since its beginning, the aim was to solve the so called
+two-language programing problem: easy to use functionalities of interpretable languages
+(Python, R, Matlab) vs high performance of compiled languages (C, C++, Fortran).
+According to its creators:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We want a language that’s open source, with a liberal license.
+We want the speed of C with the dynamism of Ruby.
+We want a language that’s homoiconic, with true macros like Lisp, but with obvious,
+familiar mathematical notation like Matlab. We want something as usable for
+general programming as Python, as easy for statistics as R, as natural for string
+processing as Perl, as powerful for linear algebra as Matlab, as good at gluing
+programs together as the shell.
+Something that is dirt simple to learn, yet keeps the most serious hackers happy.
+We want it interactive and we want it compiled. — &lt;a href=&#34;https://julialang.org/&#34; target=&#34;_blank&#34;&gt;julialang.org&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Hence, Julia was born. Combining the JIT (Just In Time) compiler and
+Julia’s multiple-dispatch system plus the fact that its codebase is written
+entirely in native language, Julia gives birth to the popular phrase in the
+community:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;“Walks like Python, runs like C.”&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;installing-julia&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Installing Julia&lt;/h1&gt;
+&lt;p&gt;To play around with Julia there are some options. One obvious way is to download
+the official binaries from the &lt;a href=&#34;https://julialang.org/downloads/&#34;&gt;site&lt;/a&gt; for your
+specific plataform (Windows, macOS, Linux, etc). At the
+time of this writting, the &lt;strong&gt;Current stable release&lt;/strong&gt; is &lt;strong&gt;v1.1.0&lt;/strong&gt; and the
+&lt;strong&gt;Long-term support release&lt;/strong&gt; is &lt;strong&gt;v1.0.3&lt;/strong&gt;. Once you downloaded and execute
+the binaries, you will see the following window:&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/posts/julia.png&#34; width=&#34;500&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt;Another options is to use Julia in the browser on &lt;a href=&#34;https://juliabox.com/&#34;&gt;JuliaBox.com&lt;/a&gt;
+with Jupyter notebooks. No installation is required – just point your browser
+there, login and start playing around.&lt;/p&gt;
+&lt;div id=&#34;installing-packages&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Installing Packages&lt;/h2&gt;
+&lt;p&gt;All the package management in Julia is performed by the &lt;strong&gt;Pkg&lt;/strong&gt; package. To
+install a given package we use &lt;code&gt;Pkg.add(&#34;package_name&#34;)&lt;/code&gt;. In this tutorial we
+are going to use some packages that are not pre-installed with Julia. To install
+them, do the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;using Pkg
+Pkg.add(&amp;quot;DataFrames&amp;quot;)
+Pkg.add(&amp;quot;DataFramesMeta&amp;quot;)
+Pkg.add(&amp;quot;CSV&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We installed three packages: &lt;strong&gt;DataFrames&lt;/strong&gt; (which is the subject of this post),
+&lt;strong&gt;DataFramesMeta&lt;/strong&gt; (we will use some of its functionalities) and &lt;strong&gt;CSV&lt;/strong&gt; (to read
+and write CSV files).&lt;/p&gt;
+&lt;p&gt;Of course there is more about package management in Julia than I just showed.
+A great introduction is presented in this &lt;a href=&#34;https://www.youtube.com/watch?v=76KL8aSz0Sg&#34;&gt;video&lt;/a&gt; by Jane
+Harriman. For more advanced usage, please refer to the &lt;a href=&#34;https://docs.julialang.org/en/v1/stdlib/Pkg/index.html&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;introduction-to-dataframes-in-julia&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction to DataFrames in Julia&lt;/h1&gt;
+&lt;p&gt;In Julia, tablular data is handled using the &lt;strong&gt;DataFrames&lt;/strong&gt; package. Other packages
+are commonly used to read/write data into/from Julia such as &lt;strong&gt;CSV&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;A data frame is created using the &lt;code&gt;DataFrame()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using DataFrames 
+foo = DataFrame();
+foo &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 0×0 DataFrame&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To use the functionalities of the package, let’s create some random data. I will
+use the &lt;code&gt;rand()&lt;/code&gt; function to generate random numbers to create an array 100 x 10
+and convert it to a data frame:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;foo = DataFrame(rand(100, 10));
+foo &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1        │ x2        │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64   │ Float64   │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼───────────┼───────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049  │ 0.941984  │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.268833  │ 0.38752   │ 0.515395  │ 0.548744  │ 0.196873 │ 0.413935  │
+## │ 3   │ 0.653006  │ 0.775944  │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 4   │ 0.662021  │ 0.395859  │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 5   │ 0.389466  │ 0.074869  │ 0.22489   │ 0.982194  │ 0.967153 │ 0.054364  │
+## │ 6   │ 0.231749  │ 0.699817  │ 0.978706  │ 0.0876782 │ 0.038083 │ 0.978241  │
+## │ 7   │ 0.0132256 │ 0.456882  │ 0.724385  │ 0.352632  │ 0.556634 │ 0.318069  │
+## ⋮
+## │ 93  │ 0.726794  │ 0.242182  │ 0.671027  │ 0.514936  │ 0.990775 │ 0.571099  │
+## │ 94  │ 0.805872  │ 0.374613  │ 0.379638  │ 0.653534  │ 0.771494 │ 0.811951  │
+## │ 95  │ 0.121561  │ 0.867647  │ 0.10364   │ 0.344063  │ 0.961394 │ 0.0466932 │
+## │ 96  │ 0.0969605 │ 0.200208  │ 0.791993  │ 0.0135568 │ 0.605704 │ 0.015903  │
+## │ 97  │ 0.755797  │ 0.0277192 │ 0.311142  │ 0.70448   │ 0.297857 │ 0.192891  │
+## │ 98  │ 0.343463  │ 0.455525  │ 0.0803646 │ 0.829322  │ 0.899713 │ 0.264247  │
+## │ 99  │ 0.381846  │ 0.3324    │ 0.74703   │ 0.461628  │ 0.757774 │ 0.699521  │
+## │ 100 │ 0.706102  │ 0.547034  │ 0.325201  │ 0.644209  │ 0.515658 │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Maybe you have noticed the “;” at the end of a command. It turns out that in Julia,
+contrary to many other languages, &lt;strong&gt;everything is an expression&lt;/strong&gt;, so it will return
+a result. Hence, to &lt;em&gt;turn off&lt;/em&gt; this return, we must include the “;” at the end of
+each command.&lt;/p&gt;
+&lt;p&gt;To get the dimension of a data frame, we can use the &lt;code&gt;size()&lt;/code&gt; function. Also,
+similarly to &lt;strong&gt;R&lt;/strong&gt; programming language, &lt;code&gt;nrow()&lt;/code&gt; and &lt;code&gt;ncol()&lt;/code&gt; are available to
+get the number of rows and columns, respectively:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;size(foo)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (100, 10)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;nrow(foo)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;ncol(foo)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Another basic task when working with datasets is to to get the names of each
+variable contained in the table. We use the &lt;code&gt;names()&lt;/code&gt; function to get the column
+names:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;names(foo)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 10-element Array{Symbol,1}:
+##  :x1 
+##  :x2 
+##  :x3 
+##  :x4 
+##  :x5 
+##  :x6 
+##  :x7 
+##  :x8 
+##  :x9 
+##  :x10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To get a summary of the dataset in general, we can use the function &lt;code&gt;describe()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;describe(foo)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 10×8 DataFrame. Omitted printing of 2 columns
+## │ Row │ variable │ mean     │ min         │ median   │ max      │ nunique │
+## │     │ Symbol   │ Float64  │ Float64     │ Float64  │ Float64  │ Nothing │
+## ├─────┼──────────┼──────────┼─────────────┼──────────┼──────────┼─────────┤
+## │ 1   │ x1       │ 0.453066 │ 0.0132256   │ 0.419284 │ 0.99138  │         │
+## │ 2   │ x2       │ 0.513706 │ 0.00722093  │ 0.493065 │ 0.996888 │         │
+## │ 3   │ x3       │ 0.46523  │ 0.0207897   │ 0.388293 │ 0.978706 │         │
+## │ 4   │ x4       │ 0.475456 │ 0.00547375  │ 0.460011 │ 0.990054 │         │
+## │ 5   │ x5       │ 0.516019 │ 0.0120962   │ 0.514278 │ 0.991582 │         │
+## │ 6   │ x6       │ 0.478659 │ 0.000597175 │ 0.496331 │ 0.997491 │         │
+## │ 7   │ x7       │ 0.588044 │ 0.0152068   │ 0.608447 │ 0.992656 │         │
+## │ 8   │ x8       │ 0.471892 │ 0.00940062  │ 0.471277 │ 0.971419 │         │
+## │ 9   │ x9       │ 0.489954 │ 0.00870507  │ 0.460613 │ 0.949002 │         │
+## │ 10  │ x10      │ 0.541052 │ 0.00234096  │ 0.54853  │ 0.997427 │         │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that there is a message indicating the omission of some columns. This is the
+default behavior of Julia. To avoid this feature, we use the &lt;code&gt;show()&lt;/code&gt; function
+as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;show(describe(foo), allcols = true)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;manipulating-rows&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Manipulating Rows:&lt;/h2&gt;
+&lt;p&gt;Subset rows in Julia can be a little odd in the beginning, but once you get used to, it becomes
+more logical. For example, suppose we want the rows where &lt;em&gt;x1&lt;/em&gt; is above its average.
+We could this as follows:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Loading the Statistics package:
+using Statistics
+## Creating the conditional:
+cond01 = foo[:x1] .&amp;gt;= mean(foo[:x1]);
+## Subsetting the rows:
+foo[cond01, :] &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 47×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1       │ x2        │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64  │ Float64   │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼──────────┼───────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049 │ 0.941984  │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.653006 │ 0.775944  │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 3   │ 0.662021 │ 0.395859  │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 4   │ 0.839592 │ 0.985965  │ 0.0207897 │ 0.699351  │ 0.199508 │ 0.25298   │
+## │ 5   │ 0.753659 │ 0.475348  │ 0.319403  │ 0.290813  │ 0.216615 │ 0.423156  │
+## │ 6   │ 0.905453 │ 0.408212  │ 0.262583  │ 0.911449  │ 0.208943 │ 0.0104419 │
+## │ 7   │ 0.949634 │ 0.700745  │ 0.287292  │ 0.922605  │ 0.274217 │ 0.987762  │
+## ⋮
+## │ 40  │ 0.499538 │ 0.8233    │ 0.604162  │ 0.245123  │ 0.142312 │ 0.390237  │
+## │ 41  │ 0.882709 │ 0.685769  │ 0.633109  │ 0.0471773 │ 0.187131 │ 0.561108  │
+## │ 42  │ 0.99138  │ 0.669913  │ 0.35628   │ 0.146096  │ 0.302161 │ 0.878408  │
+## │ 43  │ 0.548943 │ 0.193527  │ 0.0456904 │ 0.414389  │ 0.772275 │ 0.738671  │
+## │ 44  │ 0.726794 │ 0.242182  │ 0.671027  │ 0.514936  │ 0.990775 │ 0.571099  │
+## │ 45  │ 0.805872 │ 0.374613  │ 0.379638  │ 0.653534  │ 0.771494 │ 0.811951  │
+## │ 46  │ 0.755797 │ 0.0277192 │ 0.311142  │ 0.70448   │ 0.297857 │ 0.192891  │
+## │ 47  │ 0.706102 │ 0.547034  │ 0.325201  │ 0.644209  │ 0.515658 │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What if we want two conditionals? For example, we want the same condition as before
+and/or the rows where &lt;em&gt;x2&lt;/em&gt; is greater than or equal its average? Now things
+become trickier. Let’s check how we could do this:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Creating the second conditional:
+cond02 = foo[:x2] .&amp;gt;= mean(foo[:x2]);
+## Subsetting cond01 AND cond02:
+foo[.&amp;amp;(cond01, cond02), :]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 23×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1       │ x2       │ x3        │ x4        │ x5        │ x6        │
+## │     │ Float64  │ Float64  │ Float64   │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼──────────┼───────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.853049 │ 0.941984 │ 0.834525  │ 0.426661  │ 0.817881  │ 0.732692  │
+## │ 2   │ 0.653006 │ 0.775944 │ 0.370177  │ 0.965437  │ 0.461708  │ 0.867209  │
+## │ 3   │ 0.839592 │ 0.985965 │ 0.0207897 │ 0.699351  │ 0.199508  │ 0.25298   │
+## │ 4   │ 0.949634 │ 0.700745 │ 0.287292  │ 0.922605  │ 0.274217  │ 0.987762  │
+## │ 5   │ 0.544918 │ 0.609054 │ 0.334903  │ 0.911006  │ 0.512898  │ 0.392306  │
+## │ 6   │ 0.542672 │ 0.752576 │ 0.116067  │ 0.0316886 │ 0.676218  │ 0.0634602 │
+## │ 7   │ 0.606792 │ 0.573301 │ 0.0507234 │ 0.0843379 │ 0.0120962 │ 0.360556  │
+## ⋮
+## │ 16  │ 0.465731 │ 0.836518 │ 0.662136  │ 0.0844462 │ 0.639269  │ 0.519231  │
+## │ 17  │ 0.807717 │ 0.765435 │ 0.629253  │ 0.138646  │ 0.246605  │ 0.325398  │
+## │ 18  │ 0.853662 │ 0.916501 │ 0.591568  │ 0.654314  │ 0.670518  │ 0.96131   │
+## │ 19  │ 0.501717 │ 0.941838 │ 0.56254   │ 0.458395  │ 0.0322278 │ 0.486739  │
+## │ 20  │ 0.499538 │ 0.8233   │ 0.604162  │ 0.245123  │ 0.142312  │ 0.390237  │
+## │ 21  │ 0.882709 │ 0.685769 │ 0.633109  │ 0.0471773 │ 0.187131  │ 0.561108  │
+## │ 22  │ 0.99138  │ 0.669913 │ 0.35628   │ 0.146096  │ 0.302161  │ 0.878408  │
+## │ 23  │ 0.706102 │ 0.547034 │ 0.325201  │ 0.644209  │ 0.515658  │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Subsetting cond01 OR cond02:
+foo[.|(cond01, cond02), :]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 73×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1       │ x2        │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64  │ Float64   │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼──────────┼───────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049 │ 0.941984  │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.653006 │ 0.775944  │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 3   │ 0.662021 │ 0.395859  │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 4   │ 0.231749 │ 0.699817  │ 0.978706  │ 0.0876782 │ 0.038083 │ 0.978241  │
+## │ 5   │ 0.839592 │ 0.985965  │ 0.0207897 │ 0.699351  │ 0.199508 │ 0.25298   │
+## │ 6   │ 0.753659 │ 0.475348  │ 0.319403  │ 0.290813  │ 0.216615 │ 0.423156  │
+## │ 7   │ 0.905453 │ 0.408212  │ 0.262583  │ 0.911449  │ 0.208943 │ 0.0104419 │
+## ⋮
+## │ 66  │ 0.99138  │ 0.669913  │ 0.35628   │ 0.146096  │ 0.302161 │ 0.878408  │
+## │ 67  │ 0.548943 │ 0.193527  │ 0.0456904 │ 0.414389  │ 0.772275 │ 0.738671  │
+## │ 68  │ 0.193916 │ 0.666335  │ 0.177994  │ 0.463291  │ 0.219146 │ 0.199759  │
+## │ 69  │ 0.726794 │ 0.242182  │ 0.671027  │ 0.514936  │ 0.990775 │ 0.571099  │
+## │ 70  │ 0.805872 │ 0.374613  │ 0.379638  │ 0.653534  │ 0.771494 │ 0.811951  │
+## │ 71  │ 0.121561 │ 0.867647  │ 0.10364   │ 0.344063  │ 0.961394 │ 0.0466932 │
+## │ 72  │ 0.755797 │ 0.0277192 │ 0.311142  │ 0.70448   │ 0.297857 │ 0.192891  │
+## │ 73  │ 0.706102 │ 0.547034  │ 0.325201  │ 0.644209  │ 0.515658 │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In Julia, instead of the syntax &lt;em&gt;condition1 &amp;amp; condition2&lt;/em&gt;, which is more common in
+other programming languages, we use &lt;code&gt;&amp;amp;(condition1, condition2)&lt;/code&gt; or
+&lt;code&gt;|(condition1, condition2)&lt;/code&gt; operators to perform multiple conditional
+filtering.&lt;/p&gt;
+&lt;p&gt;Now, let’s say you have a DataFrame and you want to &lt;strong&gt;append&lt;/strong&gt; rows to it.
+There are a couple of ways of doing data. The first one is to use the &lt;code&gt;[data1; data2]&lt;/code&gt;
+syntax:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Creating a DataFrame with 3 rows and 5 columns:
+x = DataFrame(rand(3, 5));
+## Let&amp;#39;s add another line using [dataset1; dataset2] syntax:
+[ x ; DataFrame(rand(1, 5)) ]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 4×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64   │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┤
+## │ 1   │ 0.3621   │ 0.870556 │ 0.118475  │ 0.647054 │ 0.290722 │
+## │ 2   │ 0.217119 │ 0.188657 │ 0.715073  │ 0.160888 │ 0.875621 │
+## │ 3   │ 0.885815 │ 0.557224 │ 0.0673709 │ 0.829641 │ 0.516346 │
+## │ 4   │ 0.484389 │ 0.28812  │ 0.85745   │ 0.297455 │ 0.165585 │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We could get the same result using the &lt;code&gt;vcat()&lt;/code&gt; function. According to the
+documentation, &lt;code&gt;vcat()&lt;/code&gt; performs &lt;em&gt;concatenation along dimension 1&lt;/em&gt;, which means
+it will concatenate rows. The syntax would be:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## taking the first 2 lines and append with the third one:
+vcat(x[1:2, :] , x[3, :])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Another way to do that is using the function &lt;code&gt;append!()&lt;/code&gt;. This function will append
+a new row to the last row in a given DataFrame. Note that the column names &lt;strong&gt;must&lt;/strong&gt;
+match exactly.&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Column names matches
+append!(x, DataFrame(rand(1, 5)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 4×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64   │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┤
+## │ 1   │ 0.3621   │ 0.870556 │ 0.118475  │ 0.647054 │ 0.290722 │
+## │ 2   │ 0.217119 │ 0.188657 │ 0.715073  │ 0.160888 │ 0.875621 │
+## │ 3   │ 0.885815 │ 0.557224 │ 0.0673709 │ 0.829641 │ 0.516346 │
+## │ 4   │ 0.349732 │ 0.369092 │ 0.888278  │ 0.777941 │ 0.996527 │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that if the column names between two DataFrames do not match , the &lt;code&gt;append!()&lt;/code&gt;
+function is going to throw an error. Although this kind of behavior is important
+when we want to control for possible side effects, we might also prefer to not worry about
+this and “&lt;em&gt;force&lt;/em&gt;” the append procedure. In order to do this we can make use of
+the &lt;code&gt;push!()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## providing an Array:
+push!(x, rand(ncol(x)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4        │ x5       │
+## │     │ Float64  │ Float64  │ Float64   │ Float64   │ Float64  │
+## ├─────┼──────────┼──────────┼───────────┼───────────┼──────────┤
+## │ 1   │ 0.3621   │ 0.870556 │ 0.118475  │ 0.647054  │ 0.290722 │
+## │ 2   │ 0.217119 │ 0.188657 │ 0.715073  │ 0.160888  │ 0.875621 │
+## │ 3   │ 0.885815 │ 0.557224 │ 0.0673709 │ 0.829641  │ 0.516346 │
+## │ 4   │ 0.349732 │ 0.369092 │ 0.888278  │ 0.777941  │ 0.996527 │
+## │ 5   │ 0.261479 │ 0.125481 │ 0.312862  │ 0.0167106 │ 0.182497 │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## providing an dictionary:
+push!(x, Dict(:x1 =&amp;gt; rand(),
+              :x2 =&amp;gt; rand(),
+              :x3 =&amp;gt; rand(),
+              :x4 =&amp;gt; rand(),
+              :x5 =&amp;gt; rand()))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 6×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4        │ x5       │
+## │     │ Float64  │ Float64  │ Float64   │ Float64   │ Float64  │
+## ├─────┼──────────┼──────────┼───────────┼───────────┼──────────┤
+## │ 1   │ 0.3621   │ 0.870556 │ 0.118475  │ 0.647054  │ 0.290722 │
+## │ 2   │ 0.217119 │ 0.188657 │ 0.715073  │ 0.160888  │ 0.875621 │
+## │ 3   │ 0.885815 │ 0.557224 │ 0.0673709 │ 0.829641  │ 0.516346 │
+## │ 4   │ 0.349732 │ 0.369092 │ 0.888278  │ 0.777941  │ 0.996527 │
+## │ 5   │ 0.261479 │ 0.125481 │ 0.312862  │ 0.0167106 │ 0.182497 │
+## │ 6   │ 0.056162 │ 0.240638 │ 0.5938    │ 0.0811842 │ 0.888177 │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As we can see, this function also accepts that we give a dictionary or an array
+to append to a DataFrame.&lt;/p&gt;
+&lt;p&gt;So, there are at least 4 methods to add rows to a DataFrame. Which one to use?
+Let’s see how fast it is each function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using BenchmarkTools
+@btime [x ; DataFrame(rand(1, 5))];
+@btime vcat(x, DataFrame(rand(1, 5)));
+@btime append!(x, DataFrame(rand(1, 5)));
+@btime push!(x, rand(1, 5));&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;manipulating-columns&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Manipulating Columns:&lt;/h2&gt;
+&lt;p&gt;One of the first things we would want to do when working with a dataset is selecting
+some columns. In Julia, the syntax of selecting columns in DataFrames is similar to the one
+used in &lt;em&gt;Matlab/Octave&lt;/em&gt;. For instance, we can make use of the &lt;strong&gt;“:”&lt;/strong&gt; symbol to represent
+that we want all columns (or all rows) and/or a sequence of them:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Taking all rows of the first 2 columns:
+foo[:, 1:2]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100×2 DataFrame
+## │ Row │ x1        │ x2        │
+## │     │ Float64   │ Float64   │
+## ├─────┼───────────┼───────────┤
+## │ 1   │ 0.853049  │ 0.941984  │
+## │ 2   │ 0.268833  │ 0.38752   │
+## │ 3   │ 0.653006  │ 0.775944  │
+## │ 4   │ 0.662021  │ 0.395859  │
+## │ 5   │ 0.389466  │ 0.074869  │
+## │ 6   │ 0.231749  │ 0.699817  │
+## │ 7   │ 0.0132256 │ 0.456882  │
+## ⋮
+## │ 93  │ 0.726794  │ 0.242182  │
+## │ 94  │ 0.805872  │ 0.374613  │
+## │ 95  │ 0.121561  │ 0.867647  │
+## │ 96  │ 0.0969605 │ 0.200208  │
+## │ 97  │ 0.755797  │ 0.0277192 │
+## │ 98  │ 0.343463  │ 0.455525  │
+## │ 99  │ 0.381846  │ 0.3324    │
+## │ 100 │ 0.706102  │ 0.547034  │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Taking the first 10 rows of all columns:
+foo[1:10, :]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 10×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1        │ x2       │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64   │ Float64  │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼───────────┼──────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049  │ 0.941984 │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.268833  │ 0.38752  │ 0.515395  │ 0.548744  │ 0.196873 │ 0.413935  │
+## │ 3   │ 0.653006  │ 0.775944 │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 4   │ 0.662021  │ 0.395859 │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 5   │ 0.389466  │ 0.074869 │ 0.22489   │ 0.982194  │ 0.967153 │ 0.054364  │
+## │ 6   │ 0.231749  │ 0.699817 │ 0.978706  │ 0.0876782 │ 0.038083 │ 0.978241  │
+## │ 7   │ 0.0132256 │ 0.456882 │ 0.724385  │ 0.352632  │ 0.556634 │ 0.318069  │
+## │ 8   │ 0.839592  │ 0.985965 │ 0.0207897 │ 0.699351  │ 0.199508 │ 0.25298   │
+## │ 9   │ 0.753659  │ 0.475348 │ 0.319403  │ 0.290813  │ 0.216615 │ 0.423156  │
+## │ 10  │ 0.905453  │ 0.408212 │ 0.262583  │ 0.911449  │ 0.208943 │ 0.0104419 │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Also, we can select a column by using its name as a symbol or using the “.” operator:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## take the column x1 using &amp;quot;.&amp;quot; operator:
+foo.x1&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100-element Array{Float64,1}:
+##  0.853049275651939   
+##  0.26883276004685164 
+##  0.6530062822162541  
+##  0.6620206922979546  
+##  0.3894658057429301  
+##  0.23174854131249334 
+##  0.013225565073009315
+##  0.8395921306452785  
+##  0.7536592550872041  
+##  0.9054530568619958  
+##  ⋮                   
+##  0.19391638688350255 
+##  0.726794201325482   
+##  0.8058718201097335  
+##  0.12156118449321252 
+##  0.09696051473184841 
+##  0.7557967417845366  
+##  0.34346309022720534 
+##  0.3818458856661635  
+##  0.7061021938502039&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Take the column using &amp;quot;x1&amp;quot; as a symbol:
+foo[:x1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100-element Array{Float64,1}:
+##  0.853049275651939   
+##  0.26883276004685164 
+##  0.6530062822162541  
+##  0.6620206922979546  
+##  0.3894658057429301  
+##  0.23174854131249334 
+##  0.013225565073009315
+##  0.8395921306452785  
+##  0.7536592550872041  
+##  0.9054530568619958  
+##  ⋮                   
+##  0.19391638688350255 
+##  0.726794201325482   
+##  0.8058718201097335  
+##  0.12156118449321252 
+##  0.09696051473184841 
+##  0.7557967417845366  
+##  0.34346309022720534 
+##  0.3818458856661635  
+##  0.7061021938502039&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice that the return will be an Array. To select one or more column and return
+them as a DataFrame type, we use the double brackets syntax:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using DataFramesMeta
+## take column x1 as DataFrame
+@linq foo[[:x1]] |&amp;gt; first(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5×1 DataFrame
+## │ Row │ x1       │
+## │     │ Float64  │
+## ├─────┼──────────┤
+## │ 1   │ 0.853049 │
+## │ 2   │ 0.268833 │
+## │ 3   │ 0.653006 │
+## │ 4   │ 0.662021 │
+## │ 5   │ 0.389466 │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Take column x1 an x2:
+@linq foo[[:x1, :x2]] |&amp;gt; first(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5×2 DataFrame
+## │ Row │ x1       │ x2       │
+## │     │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┤
+## │ 1   │ 0.853049 │ 0.941984 │
+## │ 2   │ 0.268833 │ 0.38752  │
+## │ 3   │ 0.653006 │ 0.775944 │
+## │ 4   │ 0.662021 │ 0.395859 │
+## │ 5   │ 0.389466 │ 0.074869 │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are some new things here. The &lt;code&gt;first()&lt;/code&gt; function aims to just show the first
+lines of our dataset. Similarly, &lt;code&gt;last()&lt;/code&gt; performs the same, but showing us the last
+lines. Also, you may have noticed the use of the &lt;strong&gt;“|&amp;gt;”&lt;/strong&gt; operator. This is the
+&lt;strong&gt;pipe&lt;/strong&gt; symbol in Julia. If you are familiar with &lt;strong&gt;R&lt;/strong&gt; programming language, it
+works similarly to the &lt;strong&gt;“%&amp;gt;%”&lt;/strong&gt; operator from &lt;em&gt;magrittr&lt;/em&gt; package, but with some
+limitations. For example, we can not pipe to a specific argument in a
+subsequent function, so that’s why the use of &lt;strong&gt;&lt;span class=&#34;citation&#34;&gt;@linq&lt;/span&gt;&lt;/strong&gt; from &lt;strong&gt;DataFramesMeta&lt;/strong&gt;
+package. For now just take these commands for granted. In another post I will show
+how to use the functionalities of the metaprogramming tools for &lt;strong&gt;DataFrames&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Another trivial task we can perform with column is to add or alter columns in a
+DataFrame. For example, let’s create a new column which will be a sequence between
+1 and until 100 by 0.5:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## To create a sequence, use the function range():
+foo[:new_column] = range(1, step = 0.5, length = nrow(foo));
+foo[:, :new_column]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100-element Array{Float64,1}:
+##   1.0
+##   1.5
+##   2.0
+##   2.5
+##   3.0
+##   3.5
+##   4.0
+##   4.5
+##   5.0
+##   5.5
+##   ⋮  
+##  46.5
+##  47.0
+##  47.5
+##  48.0
+##  48.5
+##  49.0
+##  49.5
+##  50.0
+##  50.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can also add column using the &lt;code&gt;insertcols!()&lt;/code&gt; function. The syntax allow us to
+specify in which position we want to add the column in the DataFrame:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## syntax: insert!(dataset, position, column_name =&amp;gt; array)
+insertcols!(foo, 2, :new_colum2 =&amp;gt; range(1, step = 0.5, length = nrow(foo)));
+first(foo,&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the use of the &lt;strong&gt;“!”&lt;/strong&gt; in &lt;code&gt;insertcols!()&lt;/code&gt; function. This means that the function
+is altering the object in memory rather than in a “virtual copy” that later needs
+to be assigned to a new variable. This is a behavior that can be used in other function
+as well.&lt;/p&gt;
+&lt;p&gt;Ok… But what if you want to do the opposite? that is, to remove a column?
+Well… it is just as easy as to add it. Just use the &lt;code&gt;deletecols!()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;deletecols!(foo, [:new_column, :new_colum2])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1        │ x2        │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64   │ Float64   │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼───────────┼───────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049  │ 0.941984  │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.268833  │ 0.38752   │ 0.515395  │ 0.548744  │ 0.196873 │ 0.413935  │
+## │ 3   │ 0.653006  │ 0.775944  │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 4   │ 0.662021  │ 0.395859  │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 5   │ 0.389466  │ 0.074869  │ 0.22489   │ 0.982194  │ 0.967153 │ 0.054364  │
+## │ 6   │ 0.231749  │ 0.699817  │ 0.978706  │ 0.0876782 │ 0.038083 │ 0.978241  │
+## │ 7   │ 0.0132256 │ 0.456882  │ 0.724385  │ 0.352632  │ 0.556634 │ 0.318069  │
+## ⋮
+## │ 93  │ 0.726794  │ 0.242182  │ 0.671027  │ 0.514936  │ 0.990775 │ 0.571099  │
+## │ 94  │ 0.805872  │ 0.374613  │ 0.379638  │ 0.653534  │ 0.771494 │ 0.811951  │
+## │ 95  │ 0.121561  │ 0.867647  │ 0.10364   │ 0.344063  │ 0.961394 │ 0.0466932 │
+## │ 96  │ 0.0969605 │ 0.200208  │ 0.791993  │ 0.0135568 │ 0.605704 │ 0.015903  │
+## │ 97  │ 0.755797  │ 0.0277192 │ 0.311142  │ 0.70448   │ 0.297857 │ 0.192891  │
+## │ 98  │ 0.343463  │ 0.455525  │ 0.0803646 │ 0.829322  │ 0.899713 │ 0.264247  │
+## │ 99  │ 0.381846  │ 0.3324    │ 0.74703   │ 0.461628  │ 0.757774 │ 0.699521  │
+## │ 100 │ 0.706102  │ 0.547034  │ 0.325201  │ 0.644209  │ 0.515658 │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now suppose that you do not want to delete a colum, but just change its name.
+For this task, I am afraid there is a very difficult function to remember
+the name: &lt;code&gt;rename()&lt;/code&gt;. The syntax is as follows:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## rename(dataFrame, :old_name =&amp;gt; :new_name)
+rename(foo, :x1 =&amp;gt; :A1, :x2 =&amp;gt; :A2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ A1        │ A2        │ x3        │ x4        │ x5       │ x6        │
+## │     │ Float64   │ Float64   │ Float64   │ Float64   │ Float64  │ Float64   │
+## ├─────┼───────────┼───────────┼───────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.853049  │ 0.941984  │ 0.834525  │ 0.426661  │ 0.817881 │ 0.732692  │
+## │ 2   │ 0.268833  │ 0.38752   │ 0.515395  │ 0.548744  │ 0.196873 │ 0.413935  │
+## │ 3   │ 0.653006  │ 0.775944  │ 0.370177  │ 0.965437  │ 0.461708 │ 0.867209  │
+## │ 4   │ 0.662021  │ 0.395859  │ 0.81193   │ 0.0857389 │ 0.599511 │ 0.957124  │
+## │ 5   │ 0.389466  │ 0.074869  │ 0.22489   │ 0.982194  │ 0.967153 │ 0.054364  │
+## │ 6   │ 0.231749  │ 0.699817  │ 0.978706  │ 0.0876782 │ 0.038083 │ 0.978241  │
+## │ 7   │ 0.0132256 │ 0.456882  │ 0.724385  │ 0.352632  │ 0.556634 │ 0.318069  │
+## ⋮
+## │ 93  │ 0.726794  │ 0.242182  │ 0.671027  │ 0.514936  │ 0.990775 │ 0.571099  │
+## │ 94  │ 0.805872  │ 0.374613  │ 0.379638  │ 0.653534  │ 0.771494 │ 0.811951  │
+## │ 95  │ 0.121561  │ 0.867647  │ 0.10364   │ 0.344063  │ 0.961394 │ 0.0466932 │
+## │ 96  │ 0.0969605 │ 0.200208  │ 0.791993  │ 0.0135568 │ 0.605704 │ 0.015903  │
+## │ 97  │ 0.755797  │ 0.0277192 │ 0.311142  │ 0.70448   │ 0.297857 │ 0.192891  │
+## │ 98  │ 0.343463  │ 0.455525  │ 0.0803646 │ 0.829322  │ 0.899713 │ 0.264247  │
+## │ 99  │ 0.381846  │ 0.3324    │ 0.74703   │ 0.461628  │ 0.757774 │ 0.699521  │
+## │ 100 │ 0.706102  │ 0.547034  │ 0.325201  │ 0.644209  │ 0.515658 │ 0.140483  │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We could also add the &lt;strong&gt;“!”&lt;/strong&gt; to the &lt;code&gt;rename()&lt;/code&gt; function to alter the DataFrame
+in memory.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;lets-talk-about-missing-values&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Let’s talk about missing values:&lt;/h2&gt;
+&lt;p&gt;Missing values are represented in Julia with &lt;strong&gt;missing&lt;/strong&gt; value. When an array
+contains missing values, it automatically creates an appropriate union type:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x = [1.0, 2.0, missing]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element Array{Union{Missing, Float64},1}:
+##  1.0     
+##  2.0     
+##   missing&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;typeof(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Array{Union{Missing, Float64},1}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;typeof.(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element Array{DataType,1}:
+##  Float64
+##  Float64
+##  Missing&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To check if a particular element in an array is missing, we use the &lt;code&gt;ismissing()&lt;/code&gt;
+function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;ismissing.([1.0, 2.0, missing])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element BitArray{1}:
+##  false
+##  false
+##   true&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is important to notice that &lt;em&gt;missing&lt;/em&gt; comparison produces &lt;em&gt;missing&lt;/em&gt; as a result:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;missing == missing&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;isequal&lt;/strong&gt; and &lt;strong&gt;===&lt;/strong&gt; can be used to produce the results of type &lt;em&gt;Bool&lt;/em&gt;:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;isequal(missing, missing)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## true&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;missing === missing&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## true&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Other functions are available to work with missing values. For instance, suppose
+we want an array with only non-missing values, we use the &lt;code&gt;skipmissing()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x |&amp;gt; skipmissing |&amp;gt; collect&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2-element Array{Float64,1}:
+##  1.0
+##  2.0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here, we use the &lt;code&gt;collect()&lt;/code&gt; function as the &lt;code&gt;skipmissing()&lt;/code&gt; returns an iterator.&lt;/p&gt;
+&lt;p&gt;To replace the missing values with some other value we can use the
+&lt;code&gt;Missings.replace()&lt;/code&gt; function. For example, suppose we want to change the missing
+values by &lt;em&gt;NaN&lt;/em&gt;:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;Missings.replace(x, NaN) |&amp;gt; collect&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element Array{Float64,1}:
+##    1.0
+##    2.0
+##  NaN&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We also can use use other ways to perform the same operation:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Using coalesce() function:
+coalesce.(x, NaN)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element Array{Float64,1}:
+##    1.0
+##    2.0
+##  NaN&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Using recode() function:
+recode(x, missing =&amp;gt; NaN)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3-element Array{Float64,1}:
+##    1.0
+##    2.0
+##  NaN&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Until now, we have only talked about missing values in arrays. But what about missing
+values in DataFrames? To start, let’s create a DataFrame with some missing values:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x = DataFrame(A = [1, missing, 3, 4], B = [&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, missing, &amp;quot;C&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 4×2 DataFrame
+## │ Row │ A       │ B       │
+## │     │ Int64⍰  │ String⍰ │
+## ├─────┼─────────┼─────────┤
+## │ 1   │ 1       │ A       │
+## │ 2   │ missing │ B       │
+## │ 3   │ 3       │ missing │
+## │ 4   │ 4       │ C       │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For some analysis, we would want only the rows with non-missing values. One way
+to achieve this is making use of the &lt;code&gt;completecases()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x[completecases(x), :]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×2 DataFrame
+## │ Row │ A      │ B       │
+## │     │ Int64⍰ │ String⍰ │
+## ├─────┼────────┼─────────┤
+## │ 1   │ 1      │ A       │
+## │ 2   │ 4      │ C       │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;completecases()&lt;/code&gt; function returns an boolean array with value &lt;em&gt;true&lt;/em&gt; for
+rows that have non-missing values and &lt;em&gt;false&lt;/em&gt; otherwise. For those who are familiar
+with &lt;strong&gt;R&lt;/strong&gt;, this is the same behavior as the &lt;em&gt;complete.cases()&lt;/em&gt; function from &lt;em&gt;stats&lt;/em&gt; package.&lt;/p&gt;
+&lt;p&gt;Another option to return the rows with non-missing values of a DataFrame in Julia
+is to use the &lt;code&gt;dropmissing()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;dropmissing(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×2 DataFrame
+## │ Row │ A      │ B       │
+## │     │ Int64⍰ │ String⍰ │
+## ├─────┼────────┼─────────┤
+## │ 1   │ 1      │ A       │
+## │ 2   │ 4      │ C       │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and again, for &lt;strong&gt;R&lt;/strong&gt; users is the same behaviro as &lt;em&gt;na.omit()&lt;/em&gt; function.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;merging-dataframes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Merging DataFrames:&lt;/h2&gt;
+&lt;p&gt;Often, we need to combine two or more DataFrames together based on some common
+column(s) among them. For example, suppose we have two DataFrames:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;df1 = DataFrame(x = 1:3, y = 4:6)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 1     │ 4     │
+## │ 2   │ 2     │ 5     │
+## │ 3   │ 3     │ 6     │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;df2 = DataFrame(x = 1:3, z = &amp;#39;d&amp;#39;:&amp;#39;f&amp;#39;, new = 11:13)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×3 DataFrame
+## │ Row │ x     │ z    │ new   │
+## │     │ Int64 │ Char │ Int64 │
+## ├─────┼───────┼──────┼───────┤
+## │ 1   │ 1     │ &amp;#39;d&amp;#39;  │ 11    │
+## │ 2   │ 2     │ &amp;#39;e&amp;#39;  │ 12    │
+## │ 3   │ 3     │ &amp;#39;f&amp;#39;  │ 13    │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which have the column &lt;em&gt;x&lt;/em&gt; in common. To merge these two tables, we use the
+&lt;code&gt;join()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(df1, df2, on = :x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×4 DataFrame
+## │ Row │ x     │ y     │ z    │ new   │
+## │     │ Int64 │ Int64 │ Char │ Int64 │
+## ├─────┼───────┼───────┼──────┼───────┤
+## │ 1   │ 1     │ 4     │ &amp;#39;d&amp;#39;  │ 11    │
+## │ 2   │ 2     │ 5     │ &amp;#39;e&amp;#39;  │ 12    │
+## │ 3   │ 3     │ 6     │ &amp;#39;f&amp;#39;  │ 13    │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That’s it!! We merge our DataFrames altogether. But that’s the default behavior of
+the function. There is more to explore. Essentially, &lt;code&gt;join()&lt;/code&gt; takes 4 arguments:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DataFrame 1&lt;/li&gt;
+&lt;li&gt;DataFrame 2&lt;/li&gt;
+&lt;li&gt;on = the column(s) to be the key in merging;&lt;/li&gt;
+&lt;li&gt;kind = type of the merge (left, right, inner, outer, …)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;em&gt;kind&lt;/em&gt; argument specifies the type of join we are interested in performing.
+The definition of each one is as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Inner&lt;/em&gt;: The output contains rows for values of the key that exist
+in &lt;strong&gt;BOTH&lt;/strong&gt; the first (left) and second (right) arguments to
+join;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Left&lt;/em&gt;: The output contains rows for values of the key that exist in
+the first (left) argument to join, whether or not that value
+exists in the second (right) argument;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Right&lt;/em&gt;: The output contains rows for values of the key that exist in
+the second (right) argument to join, whether or not that
+value exists in the first (left) argument;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Outer&lt;/em&gt;: The output contains rows for values of the key that exist in
+the first (left) &lt;strong&gt;OR&lt;/strong&gt; second (right) argument to join;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;and here are the “&lt;em&gt;strange&lt;/em&gt;” ones:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Semi&lt;/em&gt;: Like an inner join, but output is restricted to columns from
+the first (left) argument to join;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Anti&lt;/em&gt;: The output contains rows for values of the key that exist in
+the first (left) but &lt;strong&gt;NOT&lt;/strong&gt; in the second (right) argument to
+join. As with semi joins, output is restricted to columns
+from the first (left) argument.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you are familiar with &lt;em&gt;SQL&lt;/em&gt; or with the join functions from &lt;em&gt;dplyr&lt;/em&gt; package in &lt;strong&gt;R&lt;/strong&gt;,
+it is the same concept.&lt;/p&gt;
+&lt;p&gt;To illustrate how the different kind of joins work, let’s create more DataFrames
+to demonstrate each type of join:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;Names = DataFrame(ID = [20, 40], Name = [&amp;quot;John Doe&amp;quot;, &amp;quot;Jane Doe&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×2 DataFrame
+## │ Row │ ID    │ Name     │
+## │     │ Int64 │ String   │
+## ├─────┼───────┼──────────┤
+## │ 1   │ 20    │ John Doe │
+## │ 2   │ 40    │ Jane Doe │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;jobs = DataFrame(ID = [20, 60], Job = [&amp;quot;Lawyer&amp;quot;, &amp;quot;Astronaut&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×2 DataFrame
+## │ Row │ ID    │ Job       │
+## │     │ Int64 │ String    │
+## ├─────┼───────┼───────────┤
+## │ 1   │ 20    │ Lawyer    │
+## │ 2   │ 60    │ Astronaut │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In the Names and jobs DataFrame, we have the ID column as the key to perform the
+join. But notice that the ID values are not equal between the DataFrames. Now
+let’s perform the joins:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :inner)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1×3 DataFrame
+## │ Row │ ID    │ Name     │ Job    │
+## │     │ Int64 │ String   │ String │
+## ├─────┼───────┼──────────┼────────┤
+## │ 1   │ 20    │ John Doe │ Lawyer │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :left)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×3 DataFrame
+## │ Row │ ID    │ Name     │ Job     │
+## │     │ Int64 │ String   │ String⍰ │
+## ├─────┼───────┼──────────┼─────────┤
+## │ 1   │ 20    │ John Doe │ Lawyer  │
+## │ 2   │ 40    │ Jane Doe │ missing │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :right)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×3 DataFrame
+## │ Row │ ID    │ Name     │ Job       │
+## │     │ Int64 │ String⍰  │ String    │
+## ├─────┼───────┼──────────┼───────────┤
+## │ 1   │ 20    │ John Doe │ Lawyer    │
+## │ 2   │ 60    │ missing  │ Astronaut │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :outer)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×3 DataFrame
+## │ Row │ ID    │ Name     │ Job       │
+## │     │ Int64 │ String⍰  │ String⍰   │
+## ├─────┼───────┼──────────┼───────────┤
+## │ 1   │ 20    │ John Doe │ Lawyer    │
+## │ 2   │ 40    │ Jane Doe │ missing   │
+## │ 3   │ 60    │ missing  │ Astronaut │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;Semi&lt;/em&gt; and &lt;em&gt;anti&lt;/em&gt; join have a more uncommon behavior. Semi join returns the rows
+from the left which &lt;strong&gt;DO MATCH&lt;/strong&gt; with the ID from the right:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :semi)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1×2 DataFrame
+## │ Row │ ID    │ Name     │
+## │     │ Int64 │ String   │
+## ├─────┼───────┼──────────┤
+## │ 1   │ 20    │ John Doe │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Anti join returns the rows from the left which &lt;strong&gt;DO NOT MATCH&lt;/strong&gt; with
+the ID from the right&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;join(Names, jobs, on = :ID, kind = :anti)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1×2 DataFrame
+## │ Row │ ID    │ Name     │
+## │     │ Int64 │ String   │
+## ├─────┼───────┼──────────┤
+## │ 1   │ 40    │ Jane Doe │&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;split-apply-combine&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Split-Apply-Combine:&lt;/h2&gt;
+&lt;p&gt;Some common tasks involve splitting the data into groups, applying some function
+to each of these groups and gathering the results to analyze later on. This is the
+split-apply-combine strategy described in the paper “&lt;a href=&#34;https://www.jstatsoft.org/article/view/v040i01&#34;&gt;The Split-Apply-Combine Strategy for Data analysis&lt;/a&gt;” written by Hadley Wickham, creator
+of many &lt;strong&gt;R&lt;/strong&gt; packages, including &lt;em&gt;ggplot2&lt;/em&gt; and &lt;em&gt;dplyr&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The DataFrames package in Julia supports the &lt;strong&gt;Split-Apply-Combine&lt;/strong&gt; strategy
+through the &lt;code&gt;by()&lt;/code&gt; function, which takes three arguments:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DataFrame;&lt;/li&gt;
+&lt;li&gt;one or more column names to split on;&lt;/li&gt;
+&lt;li&gt;a function or expression to apply to each subset;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To illustrate its usage, let’s make use of the &lt;em&gt;RDatasets&lt;/em&gt; package, which gives
+access to some preloaded well known datasets from R packages.&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using RDatasets
+foo = dataset(&amp;quot;datasets&amp;quot;, &amp;quot;iris&amp;quot;);
+first(foo, 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5×5 DataFrame
+## │ Row │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species      │
+## │     │ Float64     │ Float64    │ Float64     │ Float64    │ Categorical… │
+## ├─────┼─────────────┼────────────┼─────────────┼────────────┼──────────────┤
+## │ 1   │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa       │
+## │ 2   │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa       │
+## │ 3   │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa       │
+## │ 4   │ 4.6         │ 3.1        │ 1.5         │ 0.2        │ setosa       │
+## │ 5   │ 5.0         │ 3.6        │ 1.4         │ 0.2        │ setosa       │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A trivial task is to find how many of each “Species” there are in the
+dataset. One way to do this is to apply the &lt;strong&gt;Split-Apply-Combine&lt;/strong&gt; strategy: &lt;strong&gt;split&lt;/strong&gt;
+the data into the &lt;em&gt;Species&lt;/em&gt; column, &lt;strong&gt;apply&lt;/strong&gt; the &lt;code&gt;nrow()&lt;/code&gt; function to this
+splitted dataset, and &lt;strong&gt;combine&lt;/strong&gt; the results:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Syntax: by(dataset, :name_column_to_split, name_function)
+by(foo, :Species, nrow)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×2 DataFrame
+## │ Row │ Species      │ x1    │
+## │     │ Categorical… │ Int64 │
+## ├─────┼──────────────┼───────┤
+## │ 1   │ setosa       │ 50    │
+## │ 2   │ versicolor   │ 50    │
+## │ 3   │ virginica    │ 50    │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can also make use of &lt;strong&gt;anonymous&lt;/strong&gt; function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;by(foo, :Species, x -&amp;gt; DataFrame(N = nrow(x)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×2 DataFrame
+## │ Row │ Species      │ N     │
+## │     │ Categorical… │ Int64 │
+## ├─────┼──────────────┼───────┤
+## │ 1   │ setosa       │ 50    │
+## │ 2   │ versicolor   │ 50    │
+## │ 3   │ virginica    │ 50    │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;One of the advantages of using anonymous function inside the &lt;code&gt;by()&lt;/code&gt; function is
+that we can format the resulted output and apply as many function as we want:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Applying the count, mean and standard deviation function:
+by(foo, :Species, x -&amp;gt; DataFrame(N = nrow(x),
+                                 avg_PetalLength = mean(x[:PetalLength]),
+                                 std_PetalWidth = std(x[:PetalWidth])))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×4 DataFrame
+## │ Row │ Species      │ N     │ avg_PetalLength │ std_PetalWidth │
+## │     │ Categorical… │ Int64 │ Float64         │ Float64        │
+## ├─────┼──────────────┼───────┼─────────────────┼────────────────┤
+## │ 1   │ setosa       │ 50    │ 1.462           │ 0.105386       │
+## │ 2   │ versicolor   │ 50    │ 4.26            │ 0.197753       │
+## │ 3   │ virginica    │ 50    │ 5.552           │ 0.27465        │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Another way to use the &lt;strong&gt;Split-Apply-Combine&lt;/strong&gt; strategy is implementing the
+&lt;code&gt;aggregate()&lt;/code&gt; function, which also takes three arguments:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DataFrame;&lt;/li&gt;
+&lt;li&gt;one or more column names to split on;&lt;/li&gt;
+&lt;li&gt;one or more function to be applied &lt;strong&gt;ON THE COLUMNS NOT USED TO SPLIT&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The difference between &lt;code&gt;by()&lt;/code&gt; and &lt;code&gt;aggregate()&lt;/code&gt; function is that in the
+latter, the function(s) will be applied to each column not used in
+the split part.&lt;/p&gt;
+&lt;p&gt;For instance, let’s say you want the average of each colum for each &lt;em&gt;Species&lt;/em&gt;.
+Instead of using &lt;code&gt;by()&lt;/code&gt; with an anonymous function and writing the name of all columns
+we can do:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;aggregate(foo, :Species, [mean])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 3×5 DataFrame. Omitted printing of 1 columns
+## │ Row │ Species      │ SepalLength_mean │ SepalWidth_mean │ PetalLength_mean │
+## │     │ Categorical… │ Float64          │ Float64         │ Float64          │
+## ├─────┼──────────────┼──────────────────┼─────────────────┼──────────────────┤
+## │ 1   │ setosa       │ 5.006            │ 3.428           │ 1.462            │
+## │ 2   │ versicolor   │ 5.936            │ 2.77            │ 4.26             │
+## │ 3   │ virginica    │ 6.588            │ 2.974           │ 5.552            │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that Julia only display output that fits the screen. Pay
+attention to the message “&lt;em&gt;Omitted printing of 1 columns&lt;/em&gt;”. To
+overcome this, use the &lt;code&gt;show()&lt;/code&gt; as advised before.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;reading-and-writting-csv-files&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Reading and Writting CSV files:&lt;/h1&gt;
+&lt;p&gt;Last but not least, let’s see how to read and write CSV files into/from Julia.
+Although this is not exactly handled by the &lt;em&gt;DataFrames&lt;/em&gt; package, the task of
+reading/writing CSV files are so natural when working with DataFrame that I will
+show you the basics.&lt;/p&gt;
+&lt;p&gt;To read/write CSV files, we use the &lt;strong&gt;CSV&lt;/strong&gt; package. To demonstrate its usage,
+let’s work with the iris dataset and write a CSV file to a local computer. Then,
+we read it back.&lt;/p&gt;
+&lt;p&gt;So, first we are going to write the &lt;em&gt;foo&lt;/em&gt; object (which contains the &lt;em&gt;iris&lt;/em&gt; dataset)
+to a CSV file. To do this we will use the &lt;code&gt;CSV.write()&lt;/code&gt; function. Some useful
+arguments in CSV.write are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;delim&lt;/em&gt; : the file’s delimeter. Default ‘,’;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;header&lt;/em&gt; : boolean whether to write the colnames from source;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;colnames&lt;/em&gt; : provide colnames to be written;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;append&lt;/em&gt; : bool to indicate if it to append data;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;missingstring&lt;/em&gt; : string that indicates how missing values will be represented.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using CSV
+CSV.write(&amp;quot;./iris.csv&amp;quot;, foo, missingsstring = &amp;quot;NA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;quot;./iris.csv&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To read a CSV file, we use the &lt;code&gt;CSV.read()&lt;/code&gt;. Some useful arguments are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;delim&lt;/em&gt; : a Char or String that indicates how columns are delimited in a file’s delimeter. Default ‘,’;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;decimal&lt;/em&gt; : a Char indicating how decimals are separated in
+floats. Default ‘.’ ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;limit&lt;/em&gt; : indicates the total number of rows to read;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;header&lt;/em&gt; : provide manually the names of the columns;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;types&lt;/em&gt; : a Vector or Dict of types to be used for column types.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;iris = CSV.read(&amp;quot;./iris.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 150×5 DataFrame
+## │ Row │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species   │
+## │     │ Float64⍰    │ Float64⍰   │ Float64⍰    │ Float64⍰   │ String⍰   │
+## ├─────┼─────────────┼────────────┼─────────────┼────────────┼───────────┤
+## │ 1   │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa    │
+## │ 2   │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa    │
+## │ 3   │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa    │
+## │ 4   │ 4.6         │ 3.1        │ 1.5         │ 0.2        │ setosa    │
+## │ 5   │ 5.0         │ 3.6        │ 1.4         │ 0.2        │ setosa    │
+## │ 6   │ 5.4         │ 3.9        │ 1.7         │ 0.4        │ setosa    │
+## │ 7   │ 4.6         │ 3.4        │ 1.4         │ 0.3        │ setosa    │
+## ⋮
+## │ 143 │ 5.8         │ 2.7        │ 5.1         │ 1.9        │ virginica │
+## │ 144 │ 6.8         │ 3.2        │ 5.9         │ 2.3        │ virginica │
+## │ 145 │ 6.7         │ 3.3        │ 5.7         │ 2.5        │ virginica │
+## │ 146 │ 6.7         │ 3.0        │ 5.2         │ 2.3        │ virginica │
+## │ 147 │ 6.3         │ 2.5        │ 5.0         │ 1.9        │ virginica │
+## │ 148 │ 6.5         │ 3.0        │ 5.2         │ 2.0        │ virginica │
+## │ 149 │ 6.2         │ 3.4        │ 5.4         │ 2.3        │ virginica │
+## │ 150 │ 5.9         │ 3.0        │ 5.1         │ 1.8        │ virginica │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is important to note that when loading in a DataFrame from a CSV, all columns
+allow Missing by default.&lt;/p&gt;
+&lt;p&gt;This is the basics of reading/writting CSV files in Julia. To get more details
+refers to the &lt;a href=&#34;http://juliadata.github.io/CSV.jl/latest/#High-level-interface-1&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion:&lt;/h1&gt;
+&lt;p&gt;This post was a very small introduction to the &lt;strong&gt;DataFrames&lt;/strong&gt; packages in Julia.
+After reading this post you will be able to read CSV datasets and perform some
+tasks with the data at hand.&lt;/p&gt;
+&lt;p&gt;In the following posts, we will explore more advanced tricks to perform data
+wrangling and exploratory data analysis. At each step we are going to build
+knowledge to completely use Julia to perform data analysis for any problem that
+you might face.&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>
