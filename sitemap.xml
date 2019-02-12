@@ -3,67 +3,67 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://cleytonfar.github.io/posts/using-julia-for-data-science/</loc>
+    <loc>/posts/using-julia-for-data-science/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/research/</loc>
+    <loc>/research/</loc>
     <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/talks/</loc>
+    <loc>/talks/</loc>
     <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/vitae/</loc>
+    <loc>/vitae/</loc>
     <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2019-01-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/</loc>
+    <loc>/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/tags/data-science/</loc>
+    <loc>/tags/data-science/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/categories/julia/</loc>
+    <loc>/tags/julia/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/tags/julia/</loc>
+    <loc>/categories/julia/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://cleytonfar.github.io/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
