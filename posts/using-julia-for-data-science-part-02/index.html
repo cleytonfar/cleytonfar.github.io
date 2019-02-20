@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> Using Julia for Data Science (Part 02) &middot; Cleyton Farias </title>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/css/nix.css">
+
+
+
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-133483289-1', 'auto');
+	  ga('send', 'pageview');
+
+</script>
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=/>cleyton@farias ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="/">/home/cleyton</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/research/">~/research</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/talks/">~/talks</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/posts/">~/posts</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/vitae/">~/vitae</a>
+            		
+        		</li>
+        		
+
+			</ul>
+		</div>
+	</div>
+</nav>
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="/posts/using-julia-for-data-science-part-02/">Using Julia for Data Science (Part 02)</a></h1>
+            <span class="post-date">Feb 20, 2019 </span>
+            <div class="post-content">
+                
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>In the <a href="https://cleytonfar.github.io/posts/using-julia-for-data-science/">previous post</a>,
+we talked about what is <strong>Julia</strong>, how to install it and we have learned how to work
+rightaway with tabular data. Now we are going to take one more step and learn new
+tricks with the <strong>DataFramesMeta</strong> package.
+<!-- Remember that in the first part of this series, I use the `@linq` command.  --></p>
+<p>The first thing that we need to do is to install the package.</p>
+<pre><code>using Pkg
+Pkg.add(&quot;DataFramesMeta&quot;)</code></pre>
+<p>Once it is installed, let’s get started!</p>
+<blockquote>
+<p><strong>Important</strong>: In this post I am using the current stable release (v1.1.0). For
+those who are using the long-term support release (v1.0.3), all the code will run just
+fine.</p>
+</blockquote>
+<div id="introduction-to-dataframesmeta-package" class="section level1">
+<h1>Introduction to DataFramesMeta package</h1>
+<p>The <strong>DataFramesMeta</strong> is a package that provides a collection of metaprogramming
+tools for <strong>DataFrames</strong>. But you may be wondering why you should worry about
+metaprogramming? This package
+offers some <em>macros</em> that can be used to improve performance and provide more
+convenient syntax. But again, you might be asking: how is that useful?</p>
+<p>Ok ok ok. So, let’s consider the example used in the <a href="https://cleytonfar.github.io/posts/using-julia-for-data-science/">previous post</a> where we
+had some random dataset and we wanted the rows which <em>x1</em> and <em>x2</em> are
+both greater than or equal to their average:</p>
+<pre class="julia"><code>using DataFrames
+using Statistics
+## Creating a random dataset with 10 rows and 5 columns:
+foo = DataFrame(rand(10, 5));
+## Creating the conditions:
+cond1 = foo.x1 .&gt;= mean(foo.x1);
+cond2 = foo.x2 .&gt;= mean(foo.x2);
+## Subsetting:
+foo[.&amp;(cond1, cond2), :]</code></pre>
+<pre><code>## 3×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4        │ x5        │
+## │     │ Float64  │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.7011   │ 0.540682 │ 0.0141397 │ 0.525806  │ 0.0848541 │
+## │ 2   │ 0.766426 │ 0.816041 │ 0.851422  │ 0.607927  │ 0.249761  │
+## │ 3   │ 0.88191  │ 0.66475  │ 0.416444  │ 0.0252859 │ 0.818686  │</code></pre>
+<p>That is it!! But what if I told there is a way we could get the same result
+typing much less code?</p>
+<pre class="julia"><code>using DataFramesMeta
+@where(foo, :x1 .&gt;= mean(:x1), :x2 .&gt;= mean(:x2))</code></pre>
+<pre><code>## 3×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4        │ x5        │
+## │     │ Float64  │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.7011   │ 0.540682 │ 0.0141397 │ 0.525806  │ 0.0848541 │
+## │ 2   │ 0.766426 │ 0.816041 │ 0.851422  │ 0.607927  │ 0.249761  │
+## │ 3   │ 0.88191  │ 0.66475  │ 0.416444  │ 0.0252859 │ 0.818686  │</code></pre>
+<p>Did you see that? Using the macro <code>@where</code> we achieved the same result as before
+with just one line of code. That’s what <strong>DataFramesMeta</strong> package is all about:
+a collection of “<em>functions</em>” begining with @ that simplifies some tasks when
+working with <strong>DataFrames</strong>.</p>
+<div id="main-features-of-dataframesmeta" class="section level2">
+<h2>Main Features of DataFramesMeta:</h2>
+<p>In this post, we are going to explore what I considered to be the main tools of
+the <strong>DataFramesMeta</strong> package. For more detail, please refer to the official documentation.</p>
+<div id="with-macro" class="section level3">
+<h3><code>@with</code> macro</h3>
+<p><code>@with</code> is a macro expression that can be used with <strong>DataFrames</strong> that allows reference
+columns as <strong>symbols</strong> in expressions. For those who are familiar with <strong>R</strong> language,
+it works similarly to the <code>with()</code> function.</p>
+<pre class="julia"><code>df = DataFrame(x = 1:3, y = [2, 1, 2])</code></pre>
+<pre><code>## 3×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 1     │ 2     │
+## │ 2   │ 2     │ 1     │
+## │ 3   │ 3     │ 2     │</code></pre>
+<pre class="julia"><code>x = [2, 1, 0];
+## Taking the columm &quot;y&quot; from the df DataFrame and adding 1:
+@with(df, :y .+ 1)</code></pre>
+<pre><code>## 3-element Array{Int64,1}:
+##  3
+##  2
+##  3</code></pre>
+<pre class="julia"><code>## Taking the column &quot;x&quot; from df and add it to the x variable:
+@with(df, :x + x)</code></pre>
+<pre><code>## 3-element Array{Int64,1}:
+##  3
+##  3
+##  3</code></pre>
+<p>Also, we can reference the column by an expression and wrapped in <code>cols()</code> function:</p>
+<pre class="julia"><code>colref = :x;
+@with(df, cols(colref) .+ 1)</code></pre>
+<pre><code>## 3-element Array{Int64,1}:
+##  2
+##  3
+##  4</code></pre>
+<p>The use of <code>cols()</code> is very useful when we want to perform some task over a list
+of column variables in a <code>for</code> or <code>while</code> loop.</p>
+<p>If an expression is wrapped in <code>^(expr)</code>, then <em>expr</em> gets passed through untouched:</p>
+<pre class="julia"><code>@with(df, df[:x .&gt; 1, ^(:y)])</code></pre>
+<pre><code>## 2-element Array{Int64,1}:
+##  1
+##  2</code></pre>
+<p>Later, I’ll show how to perform this same task by piping some macros using the
+pipe <code>|&gt;</code> symbol.</p>
+</div>
+<div id="where-macro" class="section level3">
+<h3><code>@where</code> macro</h3>
+<p><code>@where</code> is used when we want to get subsets of <strong>DataFrames</strong> according to
+some criteria. It is similar to the <code>filter()</code> function from <em>dplyr</em> package
+in <strong>R</strong>:</p>
+<pre class="julia"><code>@where(df, :x .&gt; 1)</code></pre>
+<pre><code>## 2×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 2     │ 1     │
+## │ 2   │ 3     │ 2     │</code></pre>
+<pre class="julia"><code>@where(df, :x .&gt; x, :y .== 1)</code></pre>
+<pre><code>## 1×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 2     │ 1     │</code></pre>
+<p>Notice that if there is more than one condition inside <code>@where</code>, the condition are
+performed as <em>condition1</em> <strong>AND</strong> <em>condition2</em>. But if you want an <strong>OR</strong> condition to
+be performed, we can use the <code>|()</code> syntax:</p>
+<pre class="julia"><code>@where(df, .|(:x .&gt; x, :y .== 1))</code></pre>
+<pre><code>## 2×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 2     │ 1     │
+## │ 2   │ 3     │ 2     │</code></pre>
+</div>
+<div id="select-macro" class="section level3">
+<h3><code>@select</code> macro</h3>
+<p><code>@select</code> macro can be used to perform column selection in <strong>DataFrames</strong>. Again,
+if you are familiar with the <em>dplyr</em> package in <strong>R</strong>, it works similarly to the
+<code>select()</code> function.</p>
+<pre class="julia"><code>## Select column x and return as a DataFrame:
+@select(df, :x)</code></pre>
+<pre><code>## 3×1 DataFrame
+## │ Row │ x     │
+## │     │ Int64 │
+## ├─────┼───────┤
+## │ 1   │ 1     │
+## │ 2   │ 2     │
+## │ 3   │ 3     │</code></pre>
+<p>Moreover, we can also mutate variables using <code>@select</code>. For instance, suppose that
+we want the columns <em>x</em>, <em>y</em>, and a new column representing <em>x</em> times <em>y</em>:</p>
+<pre class="julia"><code>@select(df, :x, :y, x_y = :x .* :y)</code></pre>
+<pre><code>## 3×3 DataFrame
+## │ Row │ x     │ y     │ x_y   │
+## │     │ Int64 │ Int64 │ Int64 │
+## ├─────┼───────┼───────┼───────┤
+## │ 1   │ 1     │ 2     │ 2     │
+## │ 2   │ 2     │ 1     │ 2     │
+## │ 3   │ 3     │ 2     │ 6     │</code></pre>
+<p>Notice that the name of the new column is not referenced as symbol.</p>
+</div>
+<div id="transform-macro" class="section level3">
+<h3><code>@transform</code> macro</h3>
+<p>The <strong>DataFramesMeta</strong> also has a specific macro to perform mutation.
+<code>@transform</code> is very useful when we want to add new columns based on keyword
+argument:</p>
+<pre class="julia"><code>@transform(df, newColumn = :x .^ 2 + 2 .* :x)</code></pre>
+<pre><code>## 3×3 DataFrame
+## │ Row │ x     │ y     │ newColumn │
+## │     │ Int64 │ Int64 │ Int64     │
+## ├─────┼───────┼───────┼───────────┤
+## │ 1   │ 1     │ 2     │ 3         │
+## │ 2   │ 2     │ 1     │ 8         │
+## │ 3   │ 3     │ 2     │ 15        │</code></pre>
+<p>One more time, <code>@transform</code> works similarly to the <code>mutate()</code> function from
+<em>dplyr</em> package in <strong>R</strong>.</p>
+</div>
+<div id="orderby-macro" class="section level3">
+<h3><code>@orderby</code> macro</h3>
+<p><code>@orderby</code> macro is used to sort the dataset according to a specific column.</p>
+<pre class="julia"><code>using StatsBase # to use the sample() function
+## unordered data set: shuffling the dataset
+df = df[sample(1:nrow(df), nrow(df), replace = false), :]
+## ordered data set:
+@orderby(df, :x)</code></pre>
+<pre><code>## 3×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 1     │ 2     │
+## │ 2   │ 2     │ 1     │
+## │ 3   │ 3     │ 2     │</code></pre>
+<p>By default, the sort will be performed in <strong>ascending</strong> order. To sort
+in <strong>descending</strong> order, just add a <em>negative</em> sign:</p>
+<pre class="julia"><code>@orderby(df, -:x)</code></pre>
+<pre><code>## 3×2 DataFrame
+## │ Row │ x     │ y     │
+## │     │ Int64 │ Int64 │
+## ├─────┼───────┼───────┤
+## │ 1   │ 3     │ 2     │
+## │ 2   │ 2     │ 1     │
+## │ 3   │ 1     │ 2     │</code></pre>
+<!-- ### `@based_on` macro -->
+<!-- `@based_on` macro works similarly to the `summarise()` function from *dplyr* package in **R**.  -->
+<!-- To demontrate we are going to use the iris dataset.  -->
+<!-- For example: Suppose that we want the average of variable *PetalWidth* by *SepalWidth*.  -->
+<!-- First, we group the daset using the `groupby()` function using *SepalWidth* as key -->
+<!-- and then apply the `@based_on` macro to calculate the average on each of these categories: -->
+<!-- ```{julia} -->
+<!-- using RDatasets -->
+<!-- iris = dataset("datasets", "iris"); -->
+<!-- iris = groupby(iris, :SepalWidth); -->
+<!-- @based_on(iris, avg = mean(:PetalWidth)) -->
+<!-- ``` -->
+<!-- One important feature to notice: `@based_on` only accepts key that are numeric. If you want to group by -->
+<!-- variables that are categorical, you have to convert to numeric first. Otherwise  -->
+<!-- `@based_on` will throw an error.  -->
+</div>
+<div id="linq-macro" class="section level3">
+<h3><code>@linq</code> macro</h3>
+<p>For me, this is the most useful macro in this package. <code>@linq</code> macro supports
+chaining all of the functionality defined in other macros. In practice, it
+means that we can chain a bunch of macro commands using the pipe <code>|&gt;</code> syntax,
+but overcoming its limitations. What do I mean about limitations of the pipe symbol?
+Take the following as an example:</p>
+<pre class="julia"><code>## This will not work:
+df |&gt;
+    select(:x) |&gt;
+    transform(newColumn = :x .^2)</code></pre>
+<p>When you run this chunk, <strong>Julia</strong> will throw an error because it will not
+recognize the <code>select</code> macro, but also it will not figure it out how pipe the
+<em>df</em> dataset to the following functions. That’s when the <code>@linq</code> macro is very
+useful:</p>
+<pre class="julia"><code>## This will work:
+@linq df |&gt;
+    select(:x) |&gt;
+    transform(newColumn = :x .^2)</code></pre>
+<pre><code>## 3×2 DataFrame
+## │ Row │ x     │ newColumn │
+## │     │ Int64 │ Int64     │
+## ├─────┼───────┼───────────┤
+## │ 1   │ 1     │ 1         │
+## │ 2   │ 2     │ 4         │
+## │ 3   │ 3     │ 9         │</code></pre>
+<p>As we can see, the use of the <code>@linq</code> macro allows us to pipe the <em>df</em> dataset
+to the first macro, and then pipe the result of this to the following macro and
+so on. Moreover, chaining the individual macros makes the code looks cleaner and
+more obvious with less noise from @ symbols.</p>
+<p>Previously, we performed an operation using the <code>@with</code> macro where we subset
+the rows with <em>x</em> greater than 1 and take only the column <em>y</em>:</p>
+<pre class="julia"><code>@with(df, df[:x .&gt; 1, ^(:y)])</code></pre>
+<pre><code>## 2-element Array{Int64,1}:
+##  1
+##  2</code></pre>
+<p>We could get the same result using <code>@linq</code> and <code>|&gt;</code>:</p>
+<pre class="julia"><code>@linq df |&gt;
+    where(:x .&gt; 1) |&gt;
+    select(:y)</code></pre>
+<pre><code>## 2×1 DataFrame
+## │ Row │ y     │
+## │     │ Int64 │
+## ├─────┼───────┤
+## │ 1   │ 1     │
+## │ 2   │ 2     │</code></pre>
+<p>Moreover, you can not only use <code>@linq</code> to chain macros, but also with any
+function. For example, we can pipe a dataset to see the first 5 rows as well as
+to the <code>describe()</code> function:</p>
+<pre class="julia"><code>@linq foo |&gt; 
+    first(5)</code></pre>
+<pre><code>## 5×5 DataFrame
+## │ Row │ x1       │ x2       │ x3        │ x4       │ x5        │
+## │     │ Float64  │ Float64  │ Float64   │ Float64  │ Float64   │
+## ├─────┼──────────┼──────────┼───────────┼──────────┼───────────┤
+## │ 1   │ 0.7011   │ 0.540682 │ 0.0141397 │ 0.525806 │ 0.0848541 │
+## │ 2   │ 0.715848 │ 0.239389 │ 0.564841  │ 0.916762 │ 0.146186  │
+## │ 3   │ 0.174898 │ 0.96987  │ 0.839036  │ 0.974817 │ 0.19139   │
+## │ 4   │ 0.268708 │ 0.575355 │ 0.513591  │ 0.124076 │ 0.308657  │
+## │ 5   │ 0.766426 │ 0.816041 │ 0.851422  │ 0.607927 │ 0.249761  │</code></pre>
+<pre class="julia"><code>## Default behavior will omitt some columns:
+@linq foo |&gt; 
+    describe</code></pre>
+<pre><code>## 5×8 DataFrame. Omitted printing of 2 columns
+## │ Row │ variable │ mean     │ min       │ median   │ max      │ nunique │
+## │     │ Symbol   │ Float64  │ Float64   │ Float64  │ Float64  │ Nothing │
+## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┼─────────┤
+## │ 1   │ x1       │ 0.532692 │ 0.0344851 │ 0.622779 │ 0.88191  │         │
+## │ 2   │ x2       │ 0.522733 │ 0.0473018 │ 0.554191 │ 0.96987  │         │
+## │ 3   │ x3       │ 0.52243  │ 0.0141397 │ 0.473868 │ 0.950796 │         │
+## │ 4   │ x4       │ 0.575851 │ 0.0252859 │ 0.570075 │ 0.974817 │         │
+## │ 5   │ x5       │ 0.341962 │ 0.0848541 │ 0.235234 │ 0.927389 │         │</code></pre>
+<pre class="julia"><code>## This will show all columns:
+@linq foo |&gt; 
+    describe |&gt; 
+    show(allcols = true)</code></pre>
+<pre><code>## 5×8 DataFrame
+## │ Row │ variable │ mean     │ min       │ median   │ max      │ nunique │
+## │     │ Symbol   │ Float64  │ Float64   │ Float64  │ Float64  │ Nothing │
+## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┼─────────┤
+## │ 1   │ x1       │ 0.532692 │ 0.0344851 │ 0.622779 │ 0.88191  │         │
+## │ 2   │ x2       │ 0.522733 │ 0.0473018 │ 0.554191 │ 0.96987  │         │
+## │ 3   │ x3       │ 0.52243  │ 0.0141397 │ 0.473868 │ 0.950796 │         │
+## │ 4   │ x4       │ 0.575851 │ 0.0252859 │ 0.570075 │ 0.974817 │         │
+## │ 5   │ x5       │ 0.341962 │ 0.0848541 │ 0.235234 │ 0.927389 │         │
+## 
+## │ Row │ nmissing │ eltype   │
+## │     │ Nothing  │ DataType │
+## ├─────┼──────────┼──────────┤
+## │ 1   │          │ Float64  │
+## │ 2   │          │ Float64  │
+## │ 3   │          │ Float64  │
+## │ 4   │          │ Float64  │
+## │ 5   │          │ Float64  │</code></pre>
+<!-- We can use `@linq` to pipe a data set to plot a scatter plot: -->
+<!-- ```{julia, results = "asis"} -->
+<!-- using Gadfly -->
+<!-- @linq iris |> -->
+<!--     plot(x= :SepalLength, y = :SepalWidth, color = :Species, Geom.point) -->
+<!-- ``` -->
+<!-- For now, take the last command for granted. Plots is the subject for another post.  -->
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>The <strong>DataFramesMeta</strong> package presents a collection of useful macros that can be used to
+perform data wrangling and make our code cleaner. As we saw, some of these macros
+behave similarly to functions commonly used in <strong>R</strong>. Also, the use
+of the pipe operator <code>|&gt;</code> plus the <code>@linq</code> macro makes the experience even more
+alike to the <code>%&gt;%</code> operator from <em>maggrittr</em> package in <strong>R</strong>. Hence, if you come (like me) from a
+<strong>R</strong> background, <strong>Julia</strong> can become a lot easier to learn. The following table
+summarizes the equivalence among functions used in this post between the two
+languages:</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Julia
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@with</span>
+</td>
+<td style="text-align:left;">
+with()
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@select</span>
+</td>
+<td style="text-align:left;">
+select()
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@where</span>
+</td>
+<td style="text-align:left;">
+filter()
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@transform</span>
+</td>
+<td style="text-align:left;">
+mutate()
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@orderby</span>
+</td>
+<td style="text-align:left;">
+arrange()/order()
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="citation">@linq</span> + |&gt;
+</td>
+<td style="text-align:left;">
+%&gt;%
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+            </div>
+            
+            <div class="post-comments">
+                <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "cleytonfar" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2019  -
+<span class="credit">
+	Powered by
+	<a target="_blank" href="https://gohugo.io">Hugo</a>
+	and
+	<a target="_blank" href="https://github.com/LordMathis/hugo-theme-nix/">Nix</a> theme.
+</span>
+</p>
+</footer>
+
+    </body>
