@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Cleyton Farias</title>
-    <link>/tags/</link>
+    <link>https://cleytonfar.github.io/tags/</link>
     <description>Recent content in Tags on Cleyton Farias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-        <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://cleytonfar.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Data Science</title>
-      <link>/tags/data-science/</link>
+      <link>https://cleytonfar.github.io/tags/data-science/</link>
       <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/data-science/</guid>
+      <guid>https://cleytonfar.github.io/tags/data-science/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Julia</title>
-      <link>/tags/julia/</link>
+      <link>https://cleytonfar.github.io/tags/julia/</link>
       <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/julia/</guid>
+      <guid>https://cleytonfar.github.io/tags/julia/</guid>
       <description></description>
     </item>
     

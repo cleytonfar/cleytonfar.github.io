@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Cleyton Farias</title>
-    <link>/posts/</link>
+    <link>https://cleytonfar.github.io/posts/</link>
     <description>Recent content in Posts on Cleyton Farias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-        <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://cleytonfar.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using Julia for Data Science (Part 02)</title>
-      <link>/posts/using-julia-for-data-science-part-02/</link>
+      <link>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-02/</link>
       <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/posts/using-julia-for-data-science-part-02/</guid>
+      <guid>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-02/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://cleytonfar.github.io/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;In the &lt;a href=&#34;https://cleytonfar.github.io/posts/using-julia-for-data-science/&#34;&gt;previous post&lt;/a&gt;,
@@ -413,10 +413,10 @@ arrange()/order()
     
     <item>
       <title>Using Julia for Data Science </title>
-      <link>/posts/using-julia-for-data-science/</link>
+      <link>https://cleytonfar.github.io/posts/using-julia-for-data-science/</link>
       <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/posts/using-julia-for-data-science/</guid>
+      <guid>https://cleytonfar.github.io/posts/using-julia-for-data-science/</guid>
       <description>
 
 
@@ -466,7 +466,7 @@ time of this writting, the &lt;strong&gt;Current stable release&lt;/strong&gt; i
 &lt;strong&gt;Long-term support release&lt;/strong&gt; is &lt;strong&gt;v1.0.3&lt;/strong&gt;. Once you downloaded and execute
 the binaries, you will see the following window:&lt;/p&gt;
 &lt;center&gt;
-&lt;img src=&#34;/posts/julia.png&#34; width=&#34;500&#34; /&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/posts/julia.png&#34; width=&#34;500&#34; /&gt;
 &lt;/center&gt;
 &lt;p&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;p&gt;Another options is to use Julia in the browser on &lt;a href=&#34;https://juliabox.com/&#34;&gt;JuliaBox.com&lt;/a&gt;
