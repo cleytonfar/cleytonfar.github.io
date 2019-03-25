@@ -3,6 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://cleytonfar.github.io/research/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cleytonfar.github.io/talks/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cleytonfar.github.io/vitae/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-03/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-02/</loc>
     <lastmod>2019-02-20T00:00:00+00:00</lastmod>
   </url>
@@ -10,21 +30,6 @@
   <url>
     <loc>https://cleytonfar.github.io/posts/using-julia-for-data-science/</loc>
     <lastmod>2019-02-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cleytonfar.github.io/research/</loc>
-    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cleytonfar.github.io/talks/</loc>
-    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cleytonfar.github.io/vitae/</loc>
-    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -39,37 +44,37 @@
   
   <url>
     <loc>https://cleytonfar.github.io/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cleytonfar.github.io/tags/data-science/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cleytonfar.github.io/tags/julia/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cleytonfar.github.io/categories/julia/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cleytonfar.github.io/posts/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cleytonfar.github.io/tags/</loc>
-    <lastmod>2019-02-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

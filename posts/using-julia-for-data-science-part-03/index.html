@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> Using Julia for Data Science (Part 03): Plotting &middot; Cleyton Farias </title>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://cleytonfar.github.io/css/nix.css">
+
+
+
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-133483289-1', 'auto');
+	  ga('send', 'pageview');
+
+</script>
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=https://cleytonfar.github.io/>cleyton@farias ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="https://cleytonfar.github.io/">/home/cleyton</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/research/">~/research</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/talks/">~/talks</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/posts/">~/posts</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/vitae/">~/vitae</a>
+            		
+        		</li>
+        		
+
+			</ul>
+		</div>
+	</div>
+</nav>
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="https://cleytonfar.github.io/posts/using-julia-for-data-science-part-03/">Using Julia for Data Science (Part 03): Plotting</a></h1>
+            <span class="post-date">Mar 25, 2019 </span>
+            <div class="post-content">
+                
+
+
+<p>The <strong>Julia</strong> plotting system is available from a set of packages each one using its own
+syntax. The most important examples are the <strong>Plots</strong> and <strong>Gadfly</strong> packages.
+In this post, we will take a look at the basic functionalities from these libraries.</p>
+<p>Before we start playing around, the first thing to do is to install the necessary
+packages:</p>
+<pre><code>using Pkg
+Pkg.add(&quot;Plots&quot;)
+Pkg.add(&quot;GR&quot;)
+Pkg.add(&quot;PyPlot&quot;)
+Pkg.add(&quot;Gadfly&quot;)</code></pre>
+<p>Now let’s get started!!</p>
+<div id="the-plots-package" class="section level1">
+<h1>The Plots package</h1>
+<p>The most basic plot that we can do is a <em>line</em> plot. We can plot a line by calling
+the <code>plot()</code> function on two vectors:</p>
+<pre class="julia"><code>using Plots
+x = 1:10;
+y = rand(10, 1);
+plot(x, y)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-1-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>In <strong>Plots</strong>, every column is treated as a <em>series</em>. Thus, we can plot multiple
+lines by plotting a matrix of values where each column will be interpreted as a
+different serie:</p>
+<pre class="julia"><code>y = rand(10, 2);
+p = plot(x, y)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-2-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>We can modify an existing plot by using the modifier function <code>plot!()</code>. For instance,
+let’s add one more line to the previous plot:</p>
+<pre class="julia"><code>z = rand(10);
+## adding line z to plot p:
+plot!(p, x, z) </code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-3-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Notice that I specified the plot (<code>p</code>) to be modified on the last calling. We could
+just call <code>plot!(x, z)</code> and the plot <code>p</code> would be modified because the <strong>Plots</strong>
+package will look for the latest plot to apply the modifications.</p>
+<div id="plots-attributes" class="section level2">
+<h2>Plots Attributes</h2>
+<p>Not only we want to make plots, but also make them look nice, right?! So, in order
+to do that we can tweak the plot <strong>attributes</strong>. The <strong>Plots</strong> package follows a simple
+rule with <em>data</em> vs <em>attributes</em>: <em>positional</em> arguments are input data, and <em>keyword</em>
+arguments are attributes. For instance, calling <code>plot(x, y, z)</code> will produce a 3-D plot, while
+calling <code>plot(x, y, attribute = value)</code> will output a 2D plot with an attribute.
+To illustrate this, let’s add a <em>title</em> and modify the <em>legend labels</em> for our previous plot:</p>
+<pre class="julia"><code>p = plot(x, y, 
+     title = &quot;My beautiful Plot&quot;, ## adding a title
+     label = [&quot;1&quot;, &quot;2&quot;]) ## adding legend labels</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-4-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Additionally, we can use <em>modifiers functions</em> to customize our plots. For example,
+let’s say we wanted to add a label for the y-axis and x-axis. We could just add
+the argument <code>xlabel = "..."</code> and <code>ylabel = "..."</code> on the last call, or we could
+use the modifier functions <code>xlabel!()</code> and <code>ylabel!()</code>:</p>
+<pre class="julia"><code>xlabel!(p, &quot;My customized x label&quot;)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-5-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<pre class="julia"><code>ylabel!(p, &quot;My customized y label&quot;)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-5-J2.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Also, we can customize the line colors, as well as adding markers and even annotations
+to the plot:</p>
+<pre class="julia"><code>markershapes= [:circle :star5];
+markercolors= [:orange :green];
+plot(x, y,
+     title = &quot;My beautiful Plot&quot;,
+     xlabel = &quot;My customized x label&quot;,
+     ylabel = &quot;My customized y label&quot;,
+     label = [&quot;1&quot;, &quot;2&quot;],
+     color = markercolors,
+     shape = markershapes,
+     annotation = [(4, .9, &quot;Look at me!!&quot;)])</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-6-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Of course, not only plotting lines can a data scientist survive, right?! In <strong>Plots</strong>,
+we can make other types of plots just by adjusting the <code>seriestype = "..."</code> attribute.
+For instance, instead of a line plot, we can make a <em>scatter</em> plot:</p>
+<pre class="julia"><code>x = rand(20);
+y = rand(20);
+plot(x, y, seriestype = :scatter, legend = false, color = [:blue])</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-7-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Also, we can make a <em>bar</em> plot:</p>
+<pre class="julia"><code>x = 1:10;
+y = sin.(x);
+plot(x, y, seriestype = :bar, legend = false)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-8-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>and to make a <strong>histogram</strong>, we can do:</p>
+<pre class="julia"><code>using LaTeXStrings
+mathstring = L&quot;X \sim \mathcal{N}(0,\,1)&quot;;
+plot(randn(1000), seriestype = :histogram, legend = false, title = mathstring)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-9-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Notice that we can also add LaTeX notation in the plot using the functionalities
+from the <strong>LaTeXStrings</strong> package.</p>
+<p>There are a large numbers of plot attributes we can tweak. This is just the tip of
+the iceberg. For more detail, please refer to <a href="http://docs.juliaplots.org/latest/tutorial/#tutorial-1">official documentation</a>.</p>
+</div>
+<div id="plot-backend" class="section level2">
+<h2>Plot Backend</h2>
+<p>Now, let me tell something:</p>
+<blockquote>
+<p><strong>Plots</strong> is not a plotting package!!</p>
+</blockquote>
+<p>What??? That’s right!! <strong>Plots</strong> is what is called a <em>metapackage</em>. Its aim is to
+bring many different plotting packages under a single API (interface). What do you mean by that, Cleyton?</p>
+<p>Well… in <strong>Julia</strong> we have access to different plotting packages such as <strong>PyPlot</strong> (Python’s matplotlib),
+<a href="https://plot.ly/"><strong>Plotly</strong></a>, <a href="http://gr-framework.org/about.html"><strong>GR</strong></a> and some others.
+Each one have different features which can be very useful for certain situations.
+However each one has its own syntax. So, in order to get the most from these packages,
+you would have to learn their syntax.</p>
+<p>That’s when <strong>Plots</strong> comes at hand! Instead of learning different syntaxes, <strong>Plots</strong>
+package provides you access to different plotting packages (called <strong>backends</strong>)
+using just one single syntax. Then, <strong>Plots</strong> interprets your commands and then generates
+the plots using another plotting library. That is, this means you can use many
+different plotting libraries, all with the <strong>Plots</strong> syntax, only by specifying which
+<strong>backend</strong> you want to use. That’s it! Just like that!.</p>
+<p>Up until now, our plot was using the default backend. The default depends in what
+plotting package you have installed in <strong>Julia</strong>. Some common choices for backends (plotting package)
+are <strong>PyPlot</strong> and <strong>GR</strong>. To install these backends, simply use the standard <strong>Julia</strong>
+installation <code>Pkg.add("BackendPackage")</code>.</p>
+<p>In order to specify which backend we want to use just use the name of the backend
+in lower case as a function:</p>
+<pre class="julia"><code>x = 1:10;
+y = rand(10, 2);
+## specifying pyplot backend:
+pyplot()</code></pre>
+<pre><code>## Plots.PyPlotBackend()</code></pre>
+<pre class="julia"><code>plot(x, y, title = &quot;using Pyplot&quot;, shape = :cirle)</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-10-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>See?! Very easy! You can kepp changing the backend back and forth just like that.
+The choice of backend depends on the situation. Usually, I prefer to use <strong>Plotly</strong>
+when I want to make interactivity plots, <strong>GR</strong> to make simple and quick plots (for example, in an exploratory data analysis situation), and <strong>PyPlot</strong> otherwise.</p>
+<p>In order to save the plots we use the <code>savefig()</code> command:</p>
+<pre><code># saves the current plot:
+savefig(&quot;myplot.png&quot;) 
+# saves the plot from p:
+savefig(p,&quot;myplot.pdf&quot;) </code></pre>
+<p>For more information on backends, please refer to the <a href="http://docs.juliaplots.org/latest/backends/#backends-1">official documentation</a>.</p>
+</div>
+<div id="recipe-libraries" class="section level2">
+<h2>Recipe Libraries</h2>
+<p><strong>Recipes</strong> libraries are extensions that we can use with <strong>Plots</strong> framework.
+They add more functionalities such as default interpretation for certain types,
+new series types, and many others.</p>
+<p>One of the most important recipe libraries is <strong>StatsPlots</strong>, a package comprising
+a set of new statistical plot series for a certain data type. We can install this
+library using <code>Pkg.add("StatsPlots")</code> command. The <strong>StatsPlots</strong> package
+has a macro <code>@df</code> which allows you to plot a <strong>DataFrame</strong> directly by using the
+column names. We can specify the column names either as <em>symbol</em> (:column_name) or
+as <em>string</em> (“column_name”):</p>
+<pre class="julia"><code>using StatsPlots
+using DataFrames
+## creating a random DataFrame
+df = DataFrame(a = 1:10, b = rand(10), c = rand(10));
+## Plotting using the @df macro specifying colum names as symbol:
+@df df plot(:a, [:b :c], color = [:red :blue])</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-11-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>We can also make a call for <code>@df</code> using the <code>cols()</code> utility function. This function
+allows us to specify the column using a positional index:</p>
+<pre><code>@df df plot(:a, cols(2:3), color = [:red :blue])</code></pre>
+<p><strong>StatsPlots</strong> also contains the <code>corrplot()</code> and <code>cornerplot()</code> functions to plot
+the correlation among input variables:</p>
+<pre class="julia"><code>@df df corrplot(cols(2:3))</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J1.png" width="50%" style="display: block; margin: auto;" /></p>
+<pre class="julia"><code>@df df cornerplot(cols(2:3))</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J2.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Of course, there are more functionalities from the <strong>StatsPlots</strong> library
+than I have showed here. For more detail, please refer to <a href="https://github.com/JuliaPlots/StatsPlots.jl">official documentation</a>.</p>
+</div>
+</div>
+<div id="the-gadfly-package" class="section level1">
+<h1>The Gadfly Package</h1>
+<p>Now, let me be honest with you: this is my favorite one!! <strong>Gadfly</strong> is another
+package used to create beautiful plots in <strong>Julia</strong>. This package is an implementation
+of the “<em>grammar of graphics</em>”style. For those who have <strong>R</strong> experience, this is
+the same principle used in the wonderful <em>ggplot2</em> package.</p>
+<p>In order to start playing with <strong>Gadfly</strong>, we need some data. Let’s make use of the
+<strong>RDatasets</strong> package which give us access to a <a href="https://vincentarelbundock.github.io/Rdatasets/datasets.html">list</a> of the datasets available from <strong>R</strong>.</p>
+<pre><code>Pkg.add(&quot;RDatasets&quot;)</code></pre>
+<p>When used with a <code>DataFrame</code>, we can use the <code>plot()</code> function with the following syntax:</p>
+<pre><code>plot(data::DataFrame, x = :column_name, y = :column_name, geometry)</code></pre>
+<p>where the <em>geometry</em> argument is just the series type you want to plot: a <em>line</em>, <em>point</em>,
+<em>error bar</em>, <em>histogram</em>, etc.
+Notice something: <strong>Plots</strong> and <strong>Gadfly</strong> use the same name for the plotting function.
+To avoid confusion in <strong>Julia</strong> about which <code>plot()</code> function to call, we can specify
+from which package we want the call to be made by using the <code>Gadfly.plot()</code> syntax.
+For those who have an <strong>R</strong> background, this syntax is equivalent to <em>name_package</em>::function_name()
+in <strong>R</strong>.</p>
+<p>Now, let’s use the <strong>iris</strong> dataset to start playing around with <strong>Gadfly</strong>:</p>
+<pre class="julia"><code>using RDatasets
+iris = dataset(&quot;datasets&quot;, &quot;iris&quot;);
+first(iris, 5)</code></pre>
+<pre><code>## 5×5 DataFrame
+## │ Row │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species      │
+## │     │ Float64     │ Float64    │ Float64     │ Float64    │ Categorical… │
+## ├─────┼─────────────┼────────────┼─────────────┼────────────┼──────────────┤
+## │ 1   │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa       │
+## │ 2   │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa       │
+## │ 3   │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa       │
+## │ 4   │ 4.6         │ 3.1        │ 1.5         │ 0.2        │ setosa       │
+## │ 5   │ 5.0         │ 3.6        │ 1.4         │ 0.2        │ setosa       │</code></pre>
+<p>First, let’s plot a <em>scatter</em> plot using <em>SepalLength</em> and <em>SepalWidth</em> variables.
+To specify that we want a scatter plot, we must set the <em>geometry</em> element using
+<code>Geom.point</code> argument:</p>
+<pre><code>using Gadfly
+Gadfly.plot(iris, x = :SepalLength, y = :SepalWidth, Geom.point)</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot1.svg" height="500" width="700" />
+</center>
+<p>We can keep adding <em>geometries</em> to produce more layers in the plot. For instance, we
+can add lines to the plot just adding the <code>Geom.line</code> argument:</p>
+<pre><code>Gadfly.plot(iris, x = :SepalLength, y = :SepalWidth, Geom.point, Geom.line)</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot2.svg" height="500" width="700" />
+</center>
+<p>Also, we can set the keyword argument <code>color</code> according to some variable to specify
+how to color the points:</p>
+<pre><code>Gafdfly.plot(iris, x = :SepalLength, y = :SepalWidth, color = :Species, Geom.point)</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot3.svg" height="500" width="700" />
+</center>
+<p><strong>Gadfly</strong> has some special signatures to make plotting functions and expressions
+more convenient:</p>
+<pre><code>Gadfly.plot((x,y) -&gt; sin(x) + cos(y), 0, 2pi, 0, 2pi)</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot4.svg" height="500" width="700" />
+</center>
+<p>So, as you have noticed that the call from <code>Gadfly.plot()</code> will render the image to your default
+multimedia display, typically an internet browser. To be honest, I do not know why this the
+default behavior. In order to render the plot to a file, <strong>Gadfly</strong> supports creating SVG images out of the box.
+The <strong>PNG</strong>, <strong>PDF</strong>, <strong>PS</strong>, and <strong>PGF</strong> formats require <strong>Julia</strong>’s bindings to cairo
+and fontconfig, which can be installed with:</p>
+<pre><code>Pkg.add(&quot;Cairo&quot;)
+Pkg.add(&quot;Fontconfig&quot;)</code></pre>
+<p>To save to a file, we use the <code>draw()</code> function on the chosen backend:</p>
+<pre><code>p = Gadfly.plot((x,y) -&gt; sin(x) + cos(y), 0, 2pi, 0, 2pi);
+## saving to a pdf device:
+draw(PDF(&quot;plot.pdf&quot;, p))
+## or to a png device
+draw(PNG(&quot;plot.pdf&quot;, p))</code></pre>
+<div id="geometries" class="section level2">
+<h2>Geometries</h2>
+<p><strong>Gadfly</strong> presents a lot of <em>geometry</em> format options. As we have seen, to plot more
+geometries to a figure we can just add more geometry types. The most common ones are
+<code>Geom.line</code>, <code>Geom.point</code>, <code>Geom.bar</code>, <code>Geom.boxplot</code>, <code>Geom.histogram</code>,
+<code>Geom.errorbar</code>, <code>Geom.density</code>, etc.</p>
+<p>We already saw <code>Geom.line</code> and <code>Geom.point</code>. So now let’s plot the other geometry types
+in one figure using the <code>gridstack()</code> function:</p>
+<pre><code>p1 = Gadfly.plot(dataset(&quot;ggplot2&quot;, &quot;diamonds&quot;), x= :Price, Geom.histogram);
+p2 = Gadfly.plot(dataset(&quot;HistData&quot;, &quot;ChestSizes&quot;), x = :Chest, y = :Count, Geom.bar);
+p3 = Gadfly.plot(dataset(&quot;lattice&quot;, &quot;singer&quot;), x = :VoicePart, y = :Height, Geom.boxplot);
+p4 = Gadfly.plot(dataset(&quot;ggplot2&quot;, &quot;diamonds&quot;), x = :Price, Geom.density);
+gridstack([p1 p2; p3 p4])</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot5.svg" height="500" width="700" />
+</center>
+</div>
+<div id="theme" class="section level2">
+<h2>Theme</h2>
+<p>We can tweak the plot appearance by using the <code>Theme()</code> function. Many parameters
+controlling the appearance of plots can be overridden by passing this function
+to <code>plot()</code> or setting the Theme as the current theme using <code>push_theme()</code>.</p>
+<p>For instance, we can change the label and size label:</p>
+<pre><code>Gadfly.plot(x = rand(10), y = rand(10),
+             Theme(major_label_font = &quot;Hack&quot;,
+                   minor_label_font = &quot;Hack&quot;,
+                   major_label_font_size = 16pt,
+                   minor_label_font_size = 14pt,
+                   background_color = &quot;#bdbdbd&quot;))</code></pre>
+<center>
+<img src="/images/figure_posts/gadfly_plot6.svg" height="500" width="700" />
+</center>
+<p>There are a lot of options we can tweak in <code>Theme()</code>. This is just the surface.
+For the full list of options, see <a href="http://tamasnagy.com/Gadfly.jl/man/themes.html">this link</a>.</p>
+</div>
+</div>
+<div id="calling-ggplot2" class="section level1">
+<h1>Calling ggplot2</h1>
+<p>The <strong>Plots</strong> and <strong>Gadfly</strong> package are the two main plotting packages for <strong>Julia</strong>.
+Each one have different characteristics and a syntax on their own.</p>
+<p>However, let’s say you have an <strong>R</strong> background and you are very used to the wonderful
+<em>ggplot2</em> package and would rather not to learn another plotting system. Or it might
+be the case that while you are still learning the <strong>Julia</strong> plotting system you have to create
+very well crafted plots for your report but you only know how to do it in <em>ggplot2</em>.</p>
+<p>What if I told you there is a way to use <strong>Julia</strong> and still make plots using <em>ggplot2</em> package?
+Well, in order to do that we will use the <strong>RCall</strong> package. First of all, let’s install
+this package:</p>
+<pre><code>Pkg.add(&quot;RCall&quot;)</code></pre>
+<p><strong>RCall</strong> is package with the aim of facilitating communication between
+<strong>R</strong> and <strong>Julia</strong> languages and allows the user to call <strong>R</strong> packages from within
+<strong>Julia</strong>, providing the best of both worlds.</p>
+<p>In order to call <em>ggplot2</em> package from <strong>Julia</strong>, we use the <code>@rlibrary</code> syntax to
+load the <strong>R</strong> package. Then, we can use <code>R""</code> syntax to call the <strong>R</strong> command:</p>
+<pre><code>using RCall
+@rlibrary ggplot2
+gasoline = dataset(&quot;Ecdat&quot;, &quot;Gasoline&quot;);
+
+## notice that we use $name_dataset inside R&quot;&quot; command.
+R&quot;ggplot($gasoline, aes(x = Year, y = LGasPCar, color = Country)) +
+  geom_line() + 
+  geom_point() + 
+  ggthemes::theme_economist_white(gray_bg = F) +    
+  theme(panel.grid.major = element_line(colour = &#39;#d9d9d9&#39;,
+                                        size = rel(0.9),
+                                        linetype=&#39;dashed&#39;),
+        legend.position = &#39;bottom&#39;,
+        legend.direction = &#39;horizontal&#39;,
+        legend.box = &#39;horizontal&#39;,
+        legend.key.size = unit(1, &#39;cm&#39;),
+        plot.title = element_text(family= &#39;AvantGarde&#39;, hjust = 0.5),
+        text = element_text(family =  &#39;AvantGarde&#39;),
+        axis.title = element_text(size = 12),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(face = &#39;bold&#39;, size = 12)) +
+  labs(title = &#39;Gas Consumption over the years&#39;, x = &#39;&#39;, y = &#39;&#39;)&quot;</code></pre>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-14-15.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>That’s it!!! Now, You do not need to leave <strong>Julia</strong> in order to make your plots with <em>ggplot2</em>.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>In this post we saw basic functionalities of the main packages from the <strong>Julia</strong>
+plotting system. <strong>Plots</strong> and <strong>Gadfly</strong> stand out as the major players when it comes
+to plotting in <strong>Julia</strong>.</p>
+<p>The <strong>Plots</strong> package is not really a plotting package but rather an API to call other
+plotting libraries using a common syntax. Its functionalities kind of resembles
+the ones from the <em>base</em> plotting system in <strong>R</strong>.</p>
+<p>On the other hand, the <strong>Gadfly</strong> is an implementation of the “<em>grammar of graphics</em>”
+style once found in the already consolidated <em>ggplot2</em> package from <strong>R</strong>.
+It resambles many of the functionalities found in <em>ggplot2</em> and highly customizable.</p>
+<p>Which package is better depends on the case and, of course, in your preferences.
+Personally, I am very satisfied with <strong>Gadfly</strong> because of the similarities with
+<em>ggplot2</em>, but <strong>Plots</strong> package offers some handy functionalities throught
+recipes libraries, for instance <strong>StatsPlots</strong>.</p>
+<p>As an introduction to the topic, I hope this post helps you get a better understand
+on how to make well crafted plots in <strong>Julia</strong>. Have any additional comments or
+suggestion, please feel free to let me know!!</p>
+</div>
+
+            </div>
+            
+            <div class="post-comments">
+                <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "cleytonfar" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2019  -
+<span class="credit">
+	Powered by
+	<a target="_blank" href="https://gohugo.io">Hugo</a>
+	and
+	<a target="_blank" href="https://github.com/LordMathis/hugo-theme-nix/">Nix</a> theme.
+</span>
+</p>
+</footer>
+
+    </body>

@@ -6,10 +6,353 @@
     <description>Recent content in Julia on Cleyton Farias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://cleytonfar.github.io/categories/julia/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Julia for Data Science (Part 03): Plotting</title>
+      <link>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-03/</link>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://cleytonfar.github.io/posts/using-julia-for-data-science-part-03/</guid>
+      <description>
+
+
+&lt;p&gt;The &lt;strong&gt;Julia&lt;/strong&gt; plotting system is available from a set of packages each one using its own
+syntax. The most important examples are the &lt;strong&gt;Plots&lt;/strong&gt; and &lt;strong&gt;Gadfly&lt;/strong&gt; packages.
+In this post, we will take a look at the basic functionalities from these libraries.&lt;/p&gt;
+&lt;p&gt;Before we start playing around, the first thing to do is to install the necessary
+packages:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;using Pkg
+Pkg.add(&amp;quot;Plots&amp;quot;)
+Pkg.add(&amp;quot;GR&amp;quot;)
+Pkg.add(&amp;quot;PyPlot&amp;quot;)
+Pkg.add(&amp;quot;Gadfly&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s get started!!&lt;/p&gt;
+&lt;div id=&#34;the-plots-package&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Plots package&lt;/h1&gt;
+&lt;p&gt;The most basic plot that we can do is a &lt;em&gt;line&lt;/em&gt; plot. We can plot a line by calling
+the &lt;code&gt;plot()&lt;/code&gt; function on two vectors:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using Plots
+x = 1:10;
+y = rand(10, 1);
+plot(x, y)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-1-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;In &lt;strong&gt;Plots&lt;/strong&gt;, every column is treated as a &lt;em&gt;series&lt;/em&gt;. Thus, we can plot multiple
+lines by plotting a matrix of values where each column will be interpreted as a
+different serie:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;y = rand(10, 2);
+p = plot(x, y)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-2-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can modify an existing plot by using the modifier function &lt;code&gt;plot!()&lt;/code&gt;. For instance,
+let’s add one more line to the previous plot:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;z = rand(10);
+## adding line z to plot p:
+plot!(p, x, z) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-3-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that I specified the plot (&lt;code&gt;p&lt;/code&gt;) to be modified on the last calling. We could
+just call &lt;code&gt;plot!(x, z)&lt;/code&gt; and the plot &lt;code&gt;p&lt;/code&gt; would be modified because the &lt;strong&gt;Plots&lt;/strong&gt;
+package will look for the latest plot to apply the modifications.&lt;/p&gt;
+&lt;div id=&#34;plots-attributes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Plots Attributes&lt;/h2&gt;
+&lt;p&gt;Not only we want to make plots, but also make them look nice, right?! So, in order
+to do that we can tweak the plot &lt;strong&gt;attributes&lt;/strong&gt;. The &lt;strong&gt;Plots&lt;/strong&gt; package follows a simple
+rule with &lt;em&gt;data&lt;/em&gt; vs &lt;em&gt;attributes&lt;/em&gt;: &lt;em&gt;positional&lt;/em&gt; arguments are input data, and &lt;em&gt;keyword&lt;/em&gt;
+arguments are attributes. For instance, calling &lt;code&gt;plot(x, y, z)&lt;/code&gt; will produce a 3-D plot, while
+calling &lt;code&gt;plot(x, y, attribute = value)&lt;/code&gt; will output a 2D plot with an attribute.
+To illustrate this, let’s add a &lt;em&gt;title&lt;/em&gt; and modify the &lt;em&gt;legend labels&lt;/em&gt; for our previous plot:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;p = plot(x, y, 
+     title = &amp;quot;My beautiful Plot&amp;quot;, ## adding a title
+     label = [&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;]) ## adding legend labels&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-4-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Additionally, we can use &lt;em&gt;modifiers functions&lt;/em&gt; to customize our plots. For example,
+let’s say we wanted to add a label for the y-axis and x-axis. We could just add
+the argument &lt;code&gt;xlabel = &#34;...&#34;&lt;/code&gt; and &lt;code&gt;ylabel = &#34;...&#34;&lt;/code&gt; on the last call, or we could
+use the modifier functions &lt;code&gt;xlabel!()&lt;/code&gt; and &lt;code&gt;ylabel!()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;xlabel!(p, &amp;quot;My customized x label&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-5-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;ylabel!(p, &amp;quot;My customized y label&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-5-J2.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Also, we can customize the line colors, as well as adding markers and even annotations
+to the plot:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;markershapes= [:circle :star5];
+markercolors= [:orange :green];
+plot(x, y,
+     title = &amp;quot;My beautiful Plot&amp;quot;,
+     xlabel = &amp;quot;My customized x label&amp;quot;,
+     ylabel = &amp;quot;My customized y label&amp;quot;,
+     label = [&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;],
+     color = markercolors,
+     shape = markershapes,
+     annotation = [(4, .9, &amp;quot;Look at me!!&amp;quot;)])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-6-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Of course, not only plotting lines can a data scientist survive, right?! In &lt;strong&gt;Plots&lt;/strong&gt;,
+we can make other types of plots just by adjusting the &lt;code&gt;seriestype = &#34;...&#34;&lt;/code&gt; attribute.
+For instance, instead of a line plot, we can make a &lt;em&gt;scatter&lt;/em&gt; plot:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x = rand(20);
+y = rand(20);
+plot(x, y, seriestype = :scatter, legend = false, color = [:blue])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-7-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Also, we can make a &lt;em&gt;bar&lt;/em&gt; plot:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x = 1:10;
+y = sin.(x);
+plot(x, y, seriestype = :bar, legend = false)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-8-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;and to make a &lt;strong&gt;histogram&lt;/strong&gt;, we can do:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using LaTeXStrings
+mathstring = L&amp;quot;X \sim \mathcal{N}(0,\,1)&amp;quot;;
+plot(randn(1000), seriestype = :histogram, legend = false, title = mathstring)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-9-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that we can also add LaTeX notation in the plot using the functionalities
+from the &lt;strong&gt;LaTeXStrings&lt;/strong&gt; package.&lt;/p&gt;
+&lt;p&gt;There are a large numbers of plot attributes we can tweak. This is just the tip of
+the iceberg. For more detail, please refer to &lt;a href=&#34;http://docs.juliaplots.org/latest/tutorial/#tutorial-1&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;plot-backend&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Plot Backend&lt;/h2&gt;
+&lt;p&gt;Now, let me tell something:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Plots&lt;/strong&gt; is not a plotting package!!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;What??? That’s right!! &lt;strong&gt;Plots&lt;/strong&gt; is what is called a &lt;em&gt;metapackage&lt;/em&gt;. Its aim is to
+bring many different plotting packages under a single API (interface). What do you mean by that, Cleyton?&lt;/p&gt;
+&lt;p&gt;Well… in &lt;strong&gt;Julia&lt;/strong&gt; we have access to different plotting packages such as &lt;strong&gt;PyPlot&lt;/strong&gt; (Python’s matplotlib),
+&lt;a href=&#34;https://plot.ly/&#34;&gt;&lt;strong&gt;Plotly&lt;/strong&gt;&lt;/a&gt;, &lt;a href=&#34;http://gr-framework.org/about.html&#34;&gt;&lt;strong&gt;GR&lt;/strong&gt;&lt;/a&gt; and some others.
+Each one have different features which can be very useful for certain situations.
+However each one has its own syntax. So, in order to get the most from these packages,
+you would have to learn their syntax.&lt;/p&gt;
+&lt;p&gt;That’s when &lt;strong&gt;Plots&lt;/strong&gt; comes at hand! Instead of learning different syntaxes, &lt;strong&gt;Plots&lt;/strong&gt;
+package provides you access to different plotting packages (called &lt;strong&gt;backends&lt;/strong&gt;)
+using just one single syntax. Then, &lt;strong&gt;Plots&lt;/strong&gt; interprets your commands and then generates
+the plots using another plotting library. That is, this means you can use many
+different plotting libraries, all with the &lt;strong&gt;Plots&lt;/strong&gt; syntax, only by specifying which
+&lt;strong&gt;backend&lt;/strong&gt; you want to use. That’s it! Just like that!.&lt;/p&gt;
+&lt;p&gt;Up until now, our plot was using the default backend. The default depends in what
+plotting package you have installed in &lt;strong&gt;Julia&lt;/strong&gt;. Some common choices for backends (plotting package)
+are &lt;strong&gt;PyPlot&lt;/strong&gt; and &lt;strong&gt;GR&lt;/strong&gt;. To install these backends, simply use the standard &lt;strong&gt;Julia&lt;/strong&gt;
+installation &lt;code&gt;Pkg.add(&#34;BackendPackage&#34;)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In order to specify which backend we want to use just use the name of the backend
+in lower case as a function:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;x = 1:10;
+y = rand(10, 2);
+## specifying pyplot backend:
+pyplot()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Plots.PyPlotBackend()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;plot(x, y, title = &amp;quot;using Pyplot&amp;quot;, shape = :cirle)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-10-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;See?! Very easy! You can kepp changing the backend back and forth just like that.
+The choice of backend depends on the situation. Usually, I prefer to use &lt;strong&gt;Plotly&lt;/strong&gt;
+when I want to make interactivity plots, &lt;strong&gt;GR&lt;/strong&gt; to make simple and quick plots (for example, in an exploratory data analysis situation), and &lt;strong&gt;PyPlot&lt;/strong&gt; otherwise.&lt;/p&gt;
+&lt;p&gt;In order to save the plots we use the &lt;code&gt;savefig()&lt;/code&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# saves the current plot:
+savefig(&amp;quot;myplot.png&amp;quot;) 
+# saves the plot from p:
+savefig(p,&amp;quot;myplot.pdf&amp;quot;) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For more information on backends, please refer to the &lt;a href=&#34;http://docs.juliaplots.org/latest/backends/#backends-1&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;recipe-libraries&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Recipe Libraries&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Recipes&lt;/strong&gt; libraries are extensions that we can use with &lt;strong&gt;Plots&lt;/strong&gt; framework.
+They add more functionalities such as default interpretation for certain types,
+new series types, and many others.&lt;/p&gt;
+&lt;p&gt;One of the most important recipe libraries is &lt;strong&gt;StatsPlots&lt;/strong&gt;, a package comprising
+a set of new statistical plot series for a certain data type. We can install this
+library using &lt;code&gt;Pkg.add(&#34;StatsPlots&#34;)&lt;/code&gt; command. The &lt;strong&gt;StatsPlots&lt;/strong&gt; package
+has a macro &lt;code&gt;@df&lt;/code&gt; which allows you to plot a &lt;strong&gt;DataFrame&lt;/strong&gt; directly by using the
+column names. We can specify the column names either as &lt;em&gt;symbol&lt;/em&gt; (:column_name) or
+as &lt;em&gt;string&lt;/em&gt; (“column_name”):&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using StatsPlots
+using DataFrames
+## creating a random DataFrame
+df = DataFrame(a = 1:10, b = rand(10), c = rand(10));
+## Plotting using the @df macro specifying colum names as symbol:
+@df df plot(:a, [:b :c], color = [:red :blue])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-11-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can also make a call for &lt;code&gt;@df&lt;/code&gt; using the &lt;code&gt;cols()&lt;/code&gt; utility function. This function
+allows us to specify the column using a positional index:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@df df plot(:a, cols(2:3), color = [:red :blue])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;StatsPlots&lt;/strong&gt; also contains the &lt;code&gt;corrplot()&lt;/code&gt; and &lt;code&gt;cornerplot()&lt;/code&gt; functions to plot
+the correlation among input variables:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;@df df corrplot(cols(2:3))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J1.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;@df df cornerplot(cols(2:3))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J2.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Of course, there are more functionalities from the &lt;strong&gt;StatsPlots&lt;/strong&gt; library
+than I have showed here. For more detail, please refer to &lt;a href=&#34;https://github.com/JuliaPlots/StatsPlots.jl&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-gadfly-package&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Gadfly Package&lt;/h1&gt;
+&lt;p&gt;Now, let me be honest with you: this is my favorite one!! &lt;strong&gt;Gadfly&lt;/strong&gt; is another
+package used to create beautiful plots in &lt;strong&gt;Julia&lt;/strong&gt;. This package is an implementation
+of the “&lt;em&gt;grammar of graphics&lt;/em&gt;”style. For those who have &lt;strong&gt;R&lt;/strong&gt; experience, this is
+the same principle used in the wonderful &lt;em&gt;ggplot2&lt;/em&gt; package.&lt;/p&gt;
+&lt;p&gt;In order to start playing with &lt;strong&gt;Gadfly&lt;/strong&gt;, we need some data. Let’s make use of the
+&lt;strong&gt;RDatasets&lt;/strong&gt; package which give us access to a &lt;a href=&#34;https://vincentarelbundock.github.io/Rdatasets/datasets.html&#34;&gt;list&lt;/a&gt; of the datasets available from &lt;strong&gt;R&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Pkg.add(&amp;quot;RDatasets&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When used with a &lt;code&gt;DataFrame&lt;/code&gt;, we can use the &lt;code&gt;plot()&lt;/code&gt; function with the following syntax:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;plot(data::DataFrame, x = :column_name, y = :column_name, geometry)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where the &lt;em&gt;geometry&lt;/em&gt; argument is just the series type you want to plot: a &lt;em&gt;line&lt;/em&gt;, &lt;em&gt;point&lt;/em&gt;,
+&lt;em&gt;error bar&lt;/em&gt;, &lt;em&gt;histogram&lt;/em&gt;, etc.
+Notice something: &lt;strong&gt;Plots&lt;/strong&gt; and &lt;strong&gt;Gadfly&lt;/strong&gt; use the same name for the plotting function.
+To avoid confusion in &lt;strong&gt;Julia&lt;/strong&gt; about which &lt;code&gt;plot()&lt;/code&gt; function to call, we can specify
+from which package we want the call to be made by using the &lt;code&gt;Gadfly.plot()&lt;/code&gt; syntax.
+For those who have an &lt;strong&gt;R&lt;/strong&gt; background, this syntax is equivalent to &lt;em&gt;name_package&lt;/em&gt;::function_name()
+in &lt;strong&gt;R&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Now, let’s use the &lt;strong&gt;iris&lt;/strong&gt; dataset to start playing around with &lt;strong&gt;Gadfly&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using RDatasets
+iris = dataset(&amp;quot;datasets&amp;quot;, &amp;quot;iris&amp;quot;);
+first(iris, 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5×5 DataFrame
+## │ Row │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species      │
+## │     │ Float64     │ Float64    │ Float64     │ Float64    │ Categorical… │
+## ├─────┼─────────────┼────────────┼─────────────┼────────────┼──────────────┤
+## │ 1   │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa       │
+## │ 2   │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa       │
+## │ 3   │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa       │
+## │ 4   │ 4.6         │ 3.1        │ 1.5         │ 0.2        │ setosa       │
+## │ 5   │ 5.0         │ 3.6        │ 1.4         │ 0.2        │ setosa       │&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First, let’s plot a &lt;em&gt;scatter&lt;/em&gt; plot using &lt;em&gt;SepalLength&lt;/em&gt; and &lt;em&gt;SepalWidth&lt;/em&gt; variables.
+To specify that we want a scatter plot, we must set the &lt;em&gt;geometry&lt;/em&gt; element using
+&lt;code&gt;Geom.point&lt;/code&gt; argument:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;using Gadfly
+Gadfly.plot(iris, x = :SepalLength, y = :SepalWidth, Geom.point)&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot1.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;We can keep adding &lt;em&gt;geometries&lt;/em&gt; to produce more layers in the plot. For instance, we
+can add lines to the plot just adding the &lt;code&gt;Geom.line&lt;/code&gt; argument:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Gadfly.plot(iris, x = :SepalLength, y = :SepalWidth, Geom.point, Geom.line)&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot2.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;Also, we can set the keyword argument &lt;code&gt;color&lt;/code&gt; according to some variable to specify
+how to color the points:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Gafdfly.plot(iris, x = :SepalLength, y = :SepalWidth, color = :Species, Geom.point)&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot3.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;strong&gt;Gadfly&lt;/strong&gt; has some special signatures to make plotting functions and expressions
+more convenient:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Gadfly.plot((x,y) -&amp;gt; sin(x) + cos(y), 0, 2pi, 0, 2pi)&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot4.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;So, as you have noticed that the call from &lt;code&gt;Gadfly.plot()&lt;/code&gt; will render the image to your default
+multimedia display, typically an internet browser. To be honest, I do not know why this the
+default behavior. In order to render the plot to a file, &lt;strong&gt;Gadfly&lt;/strong&gt; supports creating SVG images out of the box.
+The &lt;strong&gt;PNG&lt;/strong&gt;, &lt;strong&gt;PDF&lt;/strong&gt;, &lt;strong&gt;PS&lt;/strong&gt;, and &lt;strong&gt;PGF&lt;/strong&gt; formats require &lt;strong&gt;Julia&lt;/strong&gt;’s bindings to cairo
+and fontconfig, which can be installed with:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Pkg.add(&amp;quot;Cairo&amp;quot;)
+Pkg.add(&amp;quot;Fontconfig&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To save to a file, we use the &lt;code&gt;draw()&lt;/code&gt; function on the chosen backend:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;p = Gadfly.plot((x,y) -&amp;gt; sin(x) + cos(y), 0, 2pi, 0, 2pi);
+## saving to a pdf device:
+draw(PDF(&amp;quot;plot.pdf&amp;quot;, p))
+## or to a png device
+draw(PNG(&amp;quot;plot.pdf&amp;quot;, p))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;geometries&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Geometries&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Gadfly&lt;/strong&gt; presents a lot of &lt;em&gt;geometry&lt;/em&gt; format options. As we have seen, to plot more
+geometries to a figure we can just add more geometry types. The most common ones are
+&lt;code&gt;Geom.line&lt;/code&gt;, &lt;code&gt;Geom.point&lt;/code&gt;, &lt;code&gt;Geom.bar&lt;/code&gt;, &lt;code&gt;Geom.boxplot&lt;/code&gt;, &lt;code&gt;Geom.histogram&lt;/code&gt;,
+&lt;code&gt;Geom.errorbar&lt;/code&gt;, &lt;code&gt;Geom.density&lt;/code&gt;, etc.&lt;/p&gt;
+&lt;p&gt;We already saw &lt;code&gt;Geom.line&lt;/code&gt; and &lt;code&gt;Geom.point&lt;/code&gt;. So now let’s plot the other geometry types
+in one figure using the &lt;code&gt;gridstack()&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;p1 = Gadfly.plot(dataset(&amp;quot;ggplot2&amp;quot;, &amp;quot;diamonds&amp;quot;), x= :Price, Geom.histogram);
+p2 = Gadfly.plot(dataset(&amp;quot;HistData&amp;quot;, &amp;quot;ChestSizes&amp;quot;), x = :Chest, y = :Count, Geom.bar);
+p3 = Gadfly.plot(dataset(&amp;quot;lattice&amp;quot;, &amp;quot;singer&amp;quot;), x = :VoicePart, y = :Height, Geom.boxplot);
+p4 = Gadfly.plot(dataset(&amp;quot;ggplot2&amp;quot;, &amp;quot;diamonds&amp;quot;), x = :Price, Geom.density);
+gridstack([p1 p2; p3 p4])&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot5.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+&lt;div id=&#34;theme&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Theme&lt;/h2&gt;
+&lt;p&gt;We can tweak the plot appearance by using the &lt;code&gt;Theme()&lt;/code&gt; function. Many parameters
+controlling the appearance of plots can be overridden by passing this function
+to &lt;code&gt;plot()&lt;/code&gt; or setting the Theme as the current theme using &lt;code&gt;push_theme()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, we can change the label and size label:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Gadfly.plot(x = rand(10), y = rand(10),
+             Theme(major_label_font = &amp;quot;Hack&amp;quot;,
+                   minor_label_font = &amp;quot;Hack&amp;quot;,
+                   major_label_font_size = 16pt,
+                   minor_label_font_size = 14pt,
+                   background_color = &amp;quot;#bdbdbd&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;center&gt;
+&lt;img src=&#34;https://cleytonfar.github.io/images/figure_posts/gadfly_plot6.svg&#34; height=&#34;500&#34; width=&#34;700&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;There are a lot of options we can tweak in &lt;code&gt;Theme()&lt;/code&gt;. This is just the surface.
+For the full list of options, see &lt;a href=&#34;http://tamasnagy.com/Gadfly.jl/man/themes.html&#34;&gt;this link&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;calling-ggplot2&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Calling ggplot2&lt;/h1&gt;
+&lt;p&gt;The &lt;strong&gt;Plots&lt;/strong&gt; and &lt;strong&gt;Gadfly&lt;/strong&gt; package are the two main plotting packages for &lt;strong&gt;Julia&lt;/strong&gt;.
+Each one have different characteristics and a syntax on their own.&lt;/p&gt;
+&lt;p&gt;However, let’s say you have an &lt;strong&gt;R&lt;/strong&gt; background and you are very used to the wonderful
+&lt;em&gt;ggplot2&lt;/em&gt; package and would rather not to learn another plotting system. Or it might
+be the case that while you are still learning the &lt;strong&gt;Julia&lt;/strong&gt; plotting system you have to create
+very well crafted plots for your report but you only know how to do it in &lt;em&gt;ggplot2&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;What if I told you there is a way to use &lt;strong&gt;Julia&lt;/strong&gt; and still make plots using &lt;em&gt;ggplot2&lt;/em&gt; package?
+Well, in order to do that we will use the &lt;strong&gt;RCall&lt;/strong&gt; package. First of all, let’s install
+this package:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Pkg.add(&amp;quot;RCall&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;RCall&lt;/strong&gt; is package with the aim of facilitating communication between
+&lt;strong&gt;R&lt;/strong&gt; and &lt;strong&gt;Julia&lt;/strong&gt; languages and allows the user to call &lt;strong&gt;R&lt;/strong&gt; packages from within
+&lt;strong&gt;Julia&lt;/strong&gt;, providing the best of both worlds.&lt;/p&gt;
+&lt;p&gt;In order to call &lt;em&gt;ggplot2&lt;/em&gt; package from &lt;strong&gt;Julia&lt;/strong&gt;, we use the &lt;code&gt;@rlibrary&lt;/code&gt; syntax to
+load the &lt;strong&gt;R&lt;/strong&gt; package. Then, we can use &lt;code&gt;R&#34;&#34;&lt;/code&gt; syntax to call the &lt;strong&gt;R&lt;/strong&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;using RCall
+@rlibrary ggplot2
+gasoline = dataset(&amp;quot;Ecdat&amp;quot;, &amp;quot;Gasoline&amp;quot;);
+
+## notice that we use $name_dataset inside R&amp;quot;&amp;quot; command.
+R&amp;quot;ggplot($gasoline, aes(x = Year, y = LGasPCar, color = Country)) +
+  geom_line() + 
+  geom_point() + 
+  ggthemes::theme_economist_white(gray_bg = F) +    
+  theme(panel.grid.major = element_line(colour = &amp;#39;#d9d9d9&amp;#39;,
+                                        size = rel(0.9),
+                                        linetype=&amp;#39;dashed&amp;#39;),
+        legend.position = &amp;#39;bottom&amp;#39;,
+        legend.direction = &amp;#39;horizontal&amp;#39;,
+        legend.box = &amp;#39;horizontal&amp;#39;,
+        legend.key.size = unit(1, &amp;#39;cm&amp;#39;),
+        plot.title = element_text(family= &amp;#39;AvantGarde&amp;#39;, hjust = 0.5),
+        text = element_text(family =  &amp;#39;AvantGarde&amp;#39;),
+        axis.title = element_text(size = 12),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(face = &amp;#39;bold&amp;#39;, size = 12)) +
+  labs(title = &amp;#39;Gas Consumption over the years&amp;#39;, x = &amp;#39;&amp;#39;, y = &amp;#39;&amp;#39;)&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://cleytonfar.github.io/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-14-15.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;That’s it!!! Now, You do not need to leave &lt;strong&gt;Julia&lt;/strong&gt; in order to make your plots with &lt;em&gt;ggplot2&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;In this post we saw basic functionalities of the main packages from the &lt;strong&gt;Julia&lt;/strong&gt;
+plotting system. &lt;strong&gt;Plots&lt;/strong&gt; and &lt;strong&gt;Gadfly&lt;/strong&gt; stand out as the major players when it comes
+to plotting in &lt;strong&gt;Julia&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Plots&lt;/strong&gt; package is not really a plotting package but rather an API to call other
+plotting libraries using a common syntax. Its functionalities kind of resembles
+the ones from the &lt;em&gt;base&lt;/em&gt; plotting system in &lt;strong&gt;R&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;On the other hand, the &lt;strong&gt;Gadfly&lt;/strong&gt; is an implementation of the “&lt;em&gt;grammar of graphics&lt;/em&gt;”
+style once found in the already consolidated &lt;em&gt;ggplot2&lt;/em&gt; package from &lt;strong&gt;R&lt;/strong&gt;.
+It resambles many of the functionalities found in &lt;em&gt;ggplot2&lt;/em&gt; and highly customizable.&lt;/p&gt;
+&lt;p&gt;Which package is better depends on the case and, of course, in your preferences.
+Personally, I am very satisfied with &lt;strong&gt;Gadfly&lt;/strong&gt; because of the similarities with
+&lt;em&gt;ggplot2&lt;/em&gt;, but &lt;strong&gt;Plots&lt;/strong&gt; package offers some handy functionalities throught
+recipes libraries, for instance &lt;strong&gt;StatsPlots&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;As an introduction to the topic, I hope this post helps you get a better understand
+on how to make well crafted plots in &lt;strong&gt;Julia&lt;/strong&gt;. Have any additional comments or
+suggestion, please feel free to let me know!!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Using Julia for Data Science (Part 02)</title>
@@ -54,20 +397,22 @@ cond1 = foo.x1 .&amp;gt;= mean(foo.x1);
 cond2 = foo.x2 .&amp;gt;= mean(foo.x2);
 ## Subsetting:
 foo[.&amp;amp;(cond1, cond2), :]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 1×5 DataFrame
-## │ Row │ x1      │ x2       │ x3       │ x4       │ x5       │
-## │     │ Float64 │ Float64  │ Float64  │ Float64  │ Float64  │
-## ├─────┼─────────┼──────────┼──────────┼──────────┼──────────┤
-## │ 1   │ 0.96575 │ 0.971574 │ 0.228869 │ 0.813457 │ 0.807968 │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×5 DataFrame
+## │ Row │ x1       │ x2       │ x3       │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+## │ 1   │ 0.592277 │ 0.686558 │ 0.227017 │ 0.521779 │ 0.766145 │
+## │ 2   │ 0.482976 │ 0.819687 │ 0.826704 │ 0.33042  │ 0.783202 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;That is it!! But what if I told there is a way we could get the same result
 typing much less code?&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using DataFramesMeta
 @where(foo, :x1 .&amp;gt;= mean(:x1), :x2 .&amp;gt;= mean(:x2))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 1×5 DataFrame
-## │ Row │ x1      │ x2       │ x3       │ x4       │ x5       │
-## │     │ Float64 │ Float64  │ Float64  │ Float64  │ Float64  │
-## ├─────┼─────────┼──────────┼──────────┼──────────┼──────────┤
-## │ 1   │ 0.96575 │ 0.971574 │ 0.228869 │ 0.813457 │ 0.807968 │&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2×5 DataFrame
+## │ Row │ x1       │ x2       │ x3       │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+## │ 1   │ 0.592277 │ 0.686558 │ 0.227017 │ 0.521779 │ 0.766145 │
+## │ 2   │ 0.482976 │ 0.819687 │ 0.826704 │ 0.33042  │ 0.783202 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Did you see that? Using the macro &lt;code&gt;@where&lt;/code&gt; we achieved the same result as before
 with just one line of code. That’s what &lt;strong&gt;DataFramesMeta&lt;/strong&gt; package is all about:
 a collection of “&lt;em&gt;functions&lt;/em&gt;” begining with @ that simplifies some tasks when
@@ -283,14 +628,14 @@ to the &lt;code&gt;describe()&lt;/code&gt; function:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;@linq foo |&amp;gt; 
     first(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 5×5 DataFrame
-## │ Row │ x1       │ x2        │ x3       │ x4       │ x5       │
-## │     │ Float64  │ Float64   │ Float64  │ Float64  │ Float64  │
-## ├─────┼──────────┼───────────┼──────────┼──────────┼──────────┤
-## │ 1   │ 0.921889 │ 0.205641  │ 0.200573 │ 0.247493 │ 0.490941 │
-## │ 2   │ 0.978455 │ 0.0355136 │ 0.320555 │ 0.174487 │ 0.739182 │
-## │ 3   │ 0.012211 │ 0.349529  │ 0.88621  │ 0.344799 │ 0.023447 │
-## │ 4   │ 0.52635  │ 0.614627  │ 0.857196 │ 0.52956  │ 0.542027 │
-## │ 5   │ 0.555943 │ 0.599705  │ 0.981179 │ 0.414446 │ 0.116372 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │ x3       │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+## │ 1   │ 0.39912  │ 0.367685 │ 0.693549 │ 0.674187 │ 0.374611 │
+## │ 2   │ 0.281968 │ 0.290745 │ 0.444297 │ 0.338156 │ 0.236737 │
+## │ 3   │ 0.592277 │ 0.686558 │ 0.227017 │ 0.521779 │ 0.766145 │
+## │ 4   │ 0.200297 │ 0.980769 │ 0.404363 │ 0.260706 │ 0.965564 │
+## │ 5   │ 0.365844 │ 0.553147 │ 0.170546 │ 0.261965 │ 0.819661 │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Default behavior will omitt some columns:
 @linq foo |&amp;gt; 
     describe&lt;/code&gt;&lt;/pre&gt;
@@ -298,11 +643,11 @@ to the &lt;code&gt;describe()&lt;/code&gt; function:&lt;/p&gt;
 ## │ Row │ variable │ mean     │ min       │ median   │ max      │ nunique │
 ## │     │ Symbol   │ Float64  │ Float64   │ Float64  │ Float64  │ Nothing │
 ## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┼─────────┤
-## │ 1   │ x1       │ 0.642087 │ 0.012211  │ 0.715696 │ 0.978455 │         │
-## │ 2   │ x2       │ 0.391035 │ 0.0355136 │ 0.288137 │ 0.971574 │         │
-## │ 3   │ x3       │ 0.522389 │ 0.184677  │ 0.365964 │ 0.981179 │         │
-## │ 4   │ x4       │ 0.467295 │ 0.174487  │ 0.381865 │ 0.813457 │         │
-## │ 5   │ x5       │ 0.478956 │ 0.023447  │ 0.516484 │ 0.875312 │         │&lt;/code&gt;&lt;/pre&gt;
+## │ 1   │ x1       │ 0.424532 │ 0.107149  │ 0.382482 │ 0.758822 │         │
+## │ 2   │ x2       │ 0.481115 │ 0.129039  │ 0.419321 │ 0.980769 │         │
+## │ 3   │ x3       │ 0.47677  │ 0.0891667 │ 0.42433  │ 0.844539 │         │
+## │ 4   │ x4       │ 0.447222 │ 0.0440658 │ 0.358646 │ 0.999349 │         │
+## │ 5   │ x5       │ 0.630445 │ 0.212668  │ 0.774674 │ 0.965564 │         │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## This will show all columns:
 @linq foo |&amp;gt; 
     describe |&amp;gt; 
@@ -311,11 +656,11 @@ to the &lt;code&gt;describe()&lt;/code&gt; function:&lt;/p&gt;
 ## │ Row │ variable │ mean     │ min       │ median   │ max      │ nunique │
 ## │     │ Symbol   │ Float64  │ Float64   │ Float64  │ Float64  │ Nothing │
 ## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┼─────────┤
-## │ 1   │ x1       │ 0.642087 │ 0.012211  │ 0.715696 │ 0.978455 │         │
-## │ 2   │ x2       │ 0.391035 │ 0.0355136 │ 0.288137 │ 0.971574 │         │
-## │ 3   │ x3       │ 0.522389 │ 0.184677  │ 0.365964 │ 0.981179 │         │
-## │ 4   │ x4       │ 0.467295 │ 0.174487  │ 0.381865 │ 0.813457 │         │
-## │ 5   │ x5       │ 0.478956 │ 0.023447  │ 0.516484 │ 0.875312 │         │
+## │ 1   │ x1       │ 0.424532 │ 0.107149  │ 0.382482 │ 0.758822 │         │
+## │ 2   │ x2       │ 0.481115 │ 0.129039  │ 0.419321 │ 0.980769 │         │
+## │ 3   │ x3       │ 0.47677  │ 0.0891667 │ 0.42433  │ 0.844539 │         │
+## │ 4   │ x4       │ 0.447222 │ 0.0440658 │ 0.358646 │ 0.999349 │         │
+## │ 5   │ x5       │ 0.630445 │ 0.212668  │ 0.774674 │ 0.965564 │         │
 ## 
 ## │ Row │ nmissing │ eltype   │
 ## │     │ Nothing  │ DataType │
@@ -505,25 +850,25 @@ and convert it to a data frame:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;foo = DataFrame(rand(100, 10));
 foo &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1         │ x2        │ x3       │ x4       │ x5        │ x6        │
-## │     │ Float64    │ Float64   │ Float64  │ Float64  │ Float64   │ Float64   │
-## ├─────┼────────────┼───────────┼──────────┼──────────┼───────────┼───────────┤
-## │ 1   │ 0.225879   │ 0.192331  │ 0.500367 │ 0.251407 │ 0.966971  │ 0.148842  │
-## │ 2   │ 0.861597   │ 0.412075  │ 0.374348 │ 0.717581 │ 0.214939  │ 0.162007  │
-## │ 3   │ 0.160612   │ 0.582893  │ 0.173025 │ 0.187513 │ 0.55287   │ 0.0112419 │
-## │ 4   │ 0.209209   │ 0.811487  │ 0.627853 │ 0.579644 │ 0.0817368 │ 0.890347  │
-## │ 5   │ 0.00261871 │ 0.672612  │ 0.177489 │ 0.453147 │ 0.522823  │ 0.728632  │
-## │ 6   │ 0.74118    │ 0.0959063 │ 0.156164 │ 0.481103 │ 0.470978  │ 0.242957  │
-## │ 7   │ 0.499306   │ 0.759537  │ 0.596083 │ 0.705406 │ 0.49062   │ 0.0679905 │
+## │ Row │ x1       │ x2        │ x3       │ x4        │ x5        │ x6        │
+## │     │ Float64  │ Float64   │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼───────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.499939 │ 0.742551  │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099  │
+## │ 2   │ 0.188251 │ 0.345847  │ 0.233734 │ 0.292812  │ 0.150799  │ 0.209241  │
+## │ 3   │ 0.359468 │ 0.517125  │ 0.153838 │ 0.713083  │ 0.248978  │ 0.300402  │
+## │ 4   │ 0.110961 │ 0.350969  │ 0.778014 │ 0.351215  │ 0.861304  │ 0.276898  │
+## │ 5   │ 0.852005 │ 0.385833  │ 0.909628 │ 0.990282  │ 0.406267  │ 0.23514   │
+## │ 6   │ 0.146058 │ 0.020425  │ 0.537872 │ 0.891749  │ 0.748677  │ 0.264777  │
+## │ 7   │ 0.260548 │ 0.0424126 │ 0.658804 │ 0.53903   │ 0.817064  │ 0.893901  │
 ## ⋮
-## │ 93  │ 0.222511   │ 0.959517  │ 0.433462 │ 0.786266 │ 0.291277  │ 0.752664  │
-## │ 94  │ 0.924338   │ 0.346289  │ 0.289205 │ 0.425046 │ 0.259707  │ 0.248272  │
-## │ 95  │ 0.413875   │ 0.242431  │ 0.102609 │ 0.219121 │ 0.0783962 │ 0.906035  │
-## │ 96  │ 0.12751    │ 0.863311  │ 0.874288 │ 0.993273 │ 0.65365   │ 0.492878  │
-## │ 97  │ 0.100444   │ 0.688262  │ 0.889083 │ 0.508508 │ 0.609194  │ 0.459443  │
-## │ 98  │ 0.549415   │ 0.437729  │ 0.517312 │ 0.862443 │ 0.765236  │ 0.476295  │
-## │ 99  │ 0.691982   │ 0.013449  │ 0.907462 │ 0.430376 │ 0.916992  │ 0.31463   │
-## │ 100 │ 0.80663    │ 0.942501  │ 0.454332 │ 0.778539 │ 0.928999  │ 0.203433  │&lt;/code&gt;&lt;/pre&gt;
+## │ 93  │ 0.570397 │ 0.807597  │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812  │
+## │ 94  │ 0.562313 │ 0.368488  │ 0.506649 │ 0.606263  │ 0.596357  │ 0.587701  │
+## │ 95  │ 0.863495 │ 0.250764  │ 0.215276 │ 0.219656  │ 0.624933  │ 0.732734  │
+## │ 96  │ 0.952491 │ 0.389596  │ 0.717698 │ 0.641996  │ 0.0382746 │ 0.045662  │
+## │ 97  │ 0.577692 │ 0.411905  │ 0.92978  │ 0.206136  │ 0.795294  │ 0.0502117 │
+## │ 98  │ 0.833876 │ 0.531344  │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342  │
+## │ 99  │ 0.460094 │ 0.995772  │ 0.596523 │ 0.251823  │ 0.707472  │ 0.494869  │
+## │ 100 │ 0.218739 │ 0.639062  │ 0.759467 │ 0.262545  │ 0.384076  │ 0.443243  │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Maybe you have noticed the “;” at the end of a command. It turns out that in Julia,
 contrary to many other languages, &lt;strong&gt;everything is an expression&lt;/strong&gt;, so it will return
 a result. Hence, to &lt;em&gt;turn off&lt;/em&gt; this return, we must include the “;” at the end of
@@ -555,19 +900,19 @@ names:&lt;/p&gt;
 &lt;p&gt;To get a summary of the dataset in general, we can use the function &lt;code&gt;describe()&lt;/code&gt;:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;describe(foo)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 10×8 DataFrame. Omitted printing of 2 columns
-## │ Row │ variable │ mean     │ min         │ median   │ max      │ nunique │
-## │     │ Symbol   │ Float64  │ Float64     │ Float64  │ Float64  │ Nothing │
-## ├─────┼──────────┼──────────┼─────────────┼──────────┼──────────┼─────────┤
-## │ 1   │ x1       │ 0.521566 │ 0.00101872  │ 0.535538 │ 0.994214 │         │
-## │ 2   │ x2       │ 0.471494 │ 0.00620605  │ 0.446958 │ 0.993537 │         │
-## │ 3   │ x3       │ 0.542187 │ 0.00356511  │ 0.548517 │ 0.996782 │         │
-## │ 4   │ x4       │ 0.540196 │ 0.0142749   │ 0.547199 │ 0.998325 │         │
-## │ 5   │ x5       │ 0.519668 │ 0.0209813   │ 0.53339  │ 0.986796 │         │
-## │ 6   │ x6       │ 0.463791 │ 0.000979294 │ 0.410553 │ 0.98748  │         │
-## │ 7   │ x7       │ 0.542407 │ 0.00575355  │ 0.57844  │ 0.996685 │         │
-## │ 8   │ x8       │ 0.498143 │ 0.0129879   │ 0.483026 │ 0.990983 │         │
-## │ 9   │ x9       │ 0.495436 │ 0.0021232   │ 0.44771  │ 0.993903 │         │
-## │ 10  │ x10      │ 0.546081 │ 0.0107989   │ 0.600124 │ 0.981552 │         │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ variable │ mean     │ min        │ median   │ max      │ nunique │
+## │     │ Symbol   │ Float64  │ Float64    │ Float64  │ Float64  │ Nothing │
+## ├─────┼──────────┼──────────┼────────────┼──────────┼──────────┼─────────┤
+## │ 1   │ x1       │ 0.474991 │ 0.00211641 │ 0.492181 │ 0.978569 │         │
+## │ 2   │ x2       │ 0.507542 │ 0.00360635 │ 0.421456 │ 0.998601 │         │
+## │ 3   │ x3       │ 0.520485 │ 0.0136435  │ 0.551385 │ 0.981088 │         │
+## │ 4   │ x4       │ 0.526062 │ 0.00429822 │ 0.554788 │ 0.990282 │         │
+## │ 5   │ x5       │ 0.474907 │ 0.00030154 │ 0.463739 │ 0.982817 │         │
+## │ 6   │ x6       │ 0.505534 │ 0.00417223 │ 0.503762 │ 0.986307 │         │
+## │ 7   │ x7       │ 0.483815 │ 0.00285951 │ 0.489488 │ 0.99103  │         │
+## │ 8   │ x8       │ 0.51176  │ 0.00625072 │ 0.480772 │ 0.989396 │         │
+## │ 9   │ x9       │ 0.477885 │ 0.0106118  │ 0.478032 │ 0.993568 │         │
+## │ 10  │ x10      │ 0.4664   │ 0.00390269 │ 0.448709 │ 0.994322 │         │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note that there is a message indicating the omission of some columns. This is the
 default behavior of Julia. To avoid this feature, we use the &lt;code&gt;show()&lt;/code&gt; function
 as follows:&lt;/p&gt;
@@ -584,25 +929,25 @@ cond01 = foo[:x1] .&amp;gt;= mean(foo[:x1]);
 ## Subsetting the rows:
 foo[cond01, :] &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 51×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1       │ x2        │ x3       │ x4        │ x5        │ x6       │
-## │     │ Float64  │ Float64   │ Float64  │ Float64   │ Float64   │ Float64  │
-## ├─────┼──────────┼───────────┼──────────┼───────────┼───────────┼──────────┤
-## │ 1   │ 0.861597 │ 0.412075  │ 0.374348 │ 0.717581  │ 0.214939  │ 0.162007 │
-## │ 2   │ 0.74118  │ 0.0959063 │ 0.156164 │ 0.481103  │ 0.470978  │ 0.242957 │
-## │ 3   │ 0.576603 │ 0.434151  │ 0.122223 │ 0.557603  │ 0.835961  │ 0.207545 │
-## │ 4   │ 0.989989 │ 0.420554  │ 0.414457 │ 0.0142749 │ 0.339279  │ 0.246284 │
-## │ 5   │ 0.643587 │ 0.072668  │ 0.810942 │ 0.844696  │ 0.396417  │ 0.98748  │
-## │ 6   │ 0.994214 │ 0.330933  │ 0.996782 │ 0.408831  │ 0.929335  │ 0.477139 │
-## │ 7   │ 0.756011 │ 0.161452  │ 0.469754 │ 0.998325  │ 0.0999607 │ 0.272866 │
+## │ Row │ x1       │ x2         │ x3       │ x4        │ x5        │ x6        │
+## │     │ Float64  │ Float64    │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼────────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.499939 │ 0.742551   │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099  │
+## │ 2   │ 0.852005 │ 0.385833   │ 0.909628 │ 0.990282  │ 0.406267  │ 0.23514   │
+## │ 3   │ 0.96226  │ 0.170932   │ 0.961143 │ 0.163742  │ 0.380657  │ 0.507226  │
+## │ 4   │ 0.659328 │ 0.0869848  │ 0.676368 │ 0.186849  │ 0.834991  │ 0.500298  │
+## │ 5   │ 0.950205 │ 0.00360635 │ 0.555925 │ 0.524154  │ 0.109748  │ 0.928703  │
+## │ 6   │ 0.484422 │ 0.786277   │ 0.786267 │ 0.327857  │ 0.156306  │ 0.725031  │
+## │ 7   │ 0.860247 │ 0.564441   │ 0.717788 │ 0.808197  │ 0.962288  │ 0.94569   │
 ## ⋮
-## │ 44  │ 0.656633 │ 0.964215  │ 0.385154 │ 0.570916  │ 0.112236  │ 0.403144 │
-## │ 45  │ 0.789183 │ 0.817324  │ 0.332235 │ 0.45577   │ 0.605338  │ 0.590885 │
-## │ 46  │ 0.93876  │ 0.456186  │ 0.317822 │ 0.592919  │ 0.775459  │ 0.918696 │
-## │ 47  │ 0.706419 │ 0.262128  │ 0.759083 │ 0.338357  │ 0.0455117 │ 0.865792 │
-## │ 48  │ 0.924338 │ 0.346289  │ 0.289205 │ 0.425046  │ 0.259707  │ 0.248272 │
-## │ 49  │ 0.549415 │ 0.437729  │ 0.517312 │ 0.862443  │ 0.765236  │ 0.476295 │
-## │ 50  │ 0.691982 │ 0.013449  │ 0.907462 │ 0.430376  │ 0.916992  │ 0.31463  │
-## │ 51  │ 0.80663  │ 0.942501  │ 0.454332 │ 0.778539  │ 0.928999  │ 0.203433 │&lt;/code&gt;&lt;/pre&gt;
+## │ 44  │ 0.693537 │ 0.984386   │ 0.699393 │ 0.42232   │ 0.105951  │ 0.903229  │
+## │ 45  │ 0.73453  │ 0.823422   │ 0.758732 │ 0.833277  │ 0.583136  │ 0.250125  │
+## │ 46  │ 0.570397 │ 0.807597   │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812  │
+## │ 47  │ 0.562313 │ 0.368488   │ 0.506649 │ 0.606263  │ 0.596357  │ 0.587701  │
+## │ 48  │ 0.863495 │ 0.250764   │ 0.215276 │ 0.219656  │ 0.624933  │ 0.732734  │
+## │ 49  │ 0.952491 │ 0.389596   │ 0.717698 │ 0.641996  │ 0.0382746 │ 0.045662  │
+## │ 50  │ 0.577692 │ 0.411905   │ 0.92978  │ 0.206136  │ 0.795294  │ 0.0502117 │
+## │ 51  │ 0.833876 │ 0.531344   │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342  │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;What if we want two conditionals? For example, we want the same condition as before
 and/or the rows where &lt;em&gt;x2&lt;/em&gt; is greater than or equal its average? Now things
 become trickier. Let’s check how we could do this:&lt;/p&gt;
@@ -610,48 +955,48 @@ become trickier. Let’s check how we could do this:&lt;/p&gt;
 cond02 = foo[:x2] .&amp;gt;= mean(foo[:x2]);
 ## Subsetting cond01 AND cond02:
 foo[.&amp;amp;(cond01, cond02), :]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 22×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1       │ x2       │ x3       │ x4       │ x5       │ x6        │
-## │     │ Float64  │ Float64  │ Float64  │ Float64  │ Float64  │ Float64   │
-## ├─────┼──────────┼──────────┼──────────┼──────────┼──────────┼───────────┤
-## │ 1   │ 0.725643 │ 0.536419 │ 0.934199 │ 0.792358 │ 0.575611 │ 0.712631  │
-## │ 2   │ 0.53999  │ 0.698938 │ 0.566113 │ 0.179035 │ 0.561106 │ 0.0506349 │
-## │ 3   │ 0.772234 │ 0.548068 │ 0.236089 │ 0.217449 │ 0.477741 │ 0.288555  │
-## │ 4   │ 0.930754 │ 0.905001 │ 0.261692 │ 0.390488 │ 0.690849 │ 0.96747   │
-## │ 5   │ 0.903244 │ 0.871837 │ 0.883973 │ 0.56354  │ 0.94864  │ 0.694552  │
-## │ 6   │ 0.846467 │ 0.77788  │ 0.273824 │ 0.861226 │ 0.548864 │ 0.916837  │
-## │ 7   │ 0.9533   │ 0.932341 │ 0.437518 │ 0.646922 │ 0.588746 │ 0.923128  │
+&lt;pre&gt;&lt;code&gt;## 23×10 DataFrame. Omitted printing of 4 columns
+## │ Row │ x1       │ x2       │ x3       │ x4        │ x5        │ x6         │
+## │     │ Float64  │ Float64  │ Float64  │ Float64   │ Float64   │ Float64    │
+## ├─────┼──────────┼──────────┼──────────┼───────────┼───────────┼────────────┤
+## │ 1   │ 0.499939 │ 0.742551 │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099   │
+## │ 2   │ 0.484422 │ 0.786277 │ 0.786267 │ 0.327857  │ 0.156306  │ 0.725031   │
+## │ 3   │ 0.860247 │ 0.564441 │ 0.717788 │ 0.808197  │ 0.962288  │ 0.94569    │
+## │ 4   │ 0.967135 │ 0.95041  │ 0.749996 │ 0.646642  │ 0.585138  │ 0.576768   │
+## │ 5   │ 0.680419 │ 0.605862 │ 0.491457 │ 0.313525  │ 0.721354  │ 0.781019   │
+## │ 6   │ 0.733836 │ 0.838173 │ 0.706366 │ 0.584153  │ 0.732469  │ 0.00417223 │
+## │ 7   │ 0.649035 │ 0.956016 │ 0.611238 │ 0.598683  │ 0.768454  │ 0.333775   │
 ## ⋮
-## │ 15  │ 0.838489 │ 0.844764 │ 0.428844 │ 0.414879 │ 0.886651 │ 0.140351  │
-## │ 16  │ 0.795147 │ 0.937217 │ 0.647556 │ 0.401725 │ 0.967037 │ 0.804487  │
-## │ 17  │ 0.768447 │ 0.59183  │ 0.880526 │ 0.834677 │ 0.173129 │ 0.833586  │
-## │ 18  │ 0.748648 │ 0.780792 │ 0.710436 │ 0.219929 │ 0.151561 │ 0.91425   │
-## │ 19  │ 0.559578 │ 0.928516 │ 0.679301 │ 0.279592 │ 0.477774 │ 0.127828  │
-## │ 20  │ 0.656633 │ 0.964215 │ 0.385154 │ 0.570916 │ 0.112236 │ 0.403144  │
-## │ 21  │ 0.789183 │ 0.817324 │ 0.332235 │ 0.45577  │ 0.605338 │ 0.590885  │
-## │ 22  │ 0.80663  │ 0.942501 │ 0.454332 │ 0.778539 │ 0.928999 │ 0.203433  │&lt;/code&gt;&lt;/pre&gt;
+## │ 16  │ 0.72862  │ 0.740714 │ 0.117879 │ 0.106872  │ 0.322506  │ 0.926568   │
+## │ 17  │ 0.938534 │ 0.860829 │ 0.188161 │ 0.761587  │ 0.0225324 │ 0.915987   │
+## │ 18  │ 0.697372 │ 0.657921 │ 0.431017 │ 0.768647  │ 0.444408  │ 0.838798   │
+## │ 19  │ 0.636228 │ 0.911196 │ 0.791146 │ 0.526631  │ 0.766944  │ 0.921053   │
+## │ 20  │ 0.693537 │ 0.984386 │ 0.699393 │ 0.42232   │ 0.105951  │ 0.903229   │
+## │ 21  │ 0.73453  │ 0.823422 │ 0.758732 │ 0.833277  │ 0.583136  │ 0.250125   │
+## │ 22  │ 0.570397 │ 0.807597 │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812   │
+## │ 23  │ 0.833876 │ 0.531344 │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342   │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Subsetting cond01 OR cond02:
 foo[.|(cond01, cond02), :]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 76×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1         │ x2        │ x3       │ x4       │ x5        │ x6        │
-## │     │ Float64    │ Float64   │ Float64  │ Float64  │ Float64   │ Float64   │
-## ├─────┼────────────┼───────────┼──────────┼──────────┼───────────┼───────────┤
-## │ 1   │ 0.861597   │ 0.412075  │ 0.374348 │ 0.717581 │ 0.214939  │ 0.162007  │
-## │ 2   │ 0.160612   │ 0.582893  │ 0.173025 │ 0.187513 │ 0.55287   │ 0.0112419 │
-## │ 3   │ 0.209209   │ 0.811487  │ 0.627853 │ 0.579644 │ 0.0817368 │ 0.890347  │
-## │ 4   │ 0.00261871 │ 0.672612  │ 0.177489 │ 0.453147 │ 0.522823  │ 0.728632  │
-## │ 5   │ 0.74118    │ 0.0959063 │ 0.156164 │ 0.481103 │ 0.470978  │ 0.242957  │
-## │ 6   │ 0.499306   │ 0.759537  │ 0.596083 │ 0.705406 │ 0.49062   │ 0.0679905 │
-## │ 7   │ 0.576603   │ 0.434151  │ 0.122223 │ 0.557603 │ 0.835961  │ 0.207545  │
+## │ Row │ x1        │ x2        │ x3       │ x4        │ x5        │ x6        │
+## │     │ Float64   │ Float64   │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼───────────┼───────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.499939  │ 0.742551  │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099  │
+## │ 2   │ 0.359468  │ 0.517125  │ 0.153838 │ 0.713083  │ 0.248978  │ 0.300402  │
+## │ 3   │ 0.852005  │ 0.385833  │ 0.909628 │ 0.990282  │ 0.406267  │ 0.23514   │
+## │ 4   │ 0.295262  │ 0.630972  │ 0.282236 │ 0.825474  │ 0.806538  │ 0.184383  │
+## │ 5   │ 0.96226   │ 0.170932  │ 0.961143 │ 0.163742  │ 0.380657  │ 0.507226  │
+## │ 6   │ 0.659328  │ 0.0869848 │ 0.676368 │ 0.186849  │ 0.834991  │ 0.500298  │
+## │ 7   │ 0.0628919 │ 0.605204  │ 0.660167 │ 0.478901  │ 0.875391  │ 0.666078  │
 ## ⋮
-## │ 69  │ 0.706419   │ 0.262128  │ 0.759083 │ 0.338357 │ 0.0455117 │ 0.865792  │
-## │ 70  │ 0.222511   │ 0.959517  │ 0.433462 │ 0.786266 │ 0.291277  │ 0.752664  │
-## │ 71  │ 0.924338   │ 0.346289  │ 0.289205 │ 0.425046 │ 0.259707  │ 0.248272  │
-## │ 72  │ 0.12751    │ 0.863311  │ 0.874288 │ 0.993273 │ 0.65365   │ 0.492878  │
-## │ 73  │ 0.100444   │ 0.688262  │ 0.889083 │ 0.508508 │ 0.609194  │ 0.459443  │
-## │ 74  │ 0.549415   │ 0.437729  │ 0.517312 │ 0.862443 │ 0.765236  │ 0.476295  │
-## │ 75  │ 0.691982   │ 0.013449  │ 0.907462 │ 0.430376 │ 0.916992  │ 0.31463   │
-## │ 76  │ 0.80663    │ 0.942501  │ 0.454332 │ 0.778539 │ 0.928999  │ 0.203433  │&lt;/code&gt;&lt;/pre&gt;
+## │ 69  │ 0.570397  │ 0.807597  │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812  │
+## │ 70  │ 0.562313  │ 0.368488  │ 0.506649 │ 0.606263  │ 0.596357  │ 0.587701  │
+## │ 71  │ 0.863495  │ 0.250764  │ 0.215276 │ 0.219656  │ 0.624933  │ 0.732734  │
+## │ 72  │ 0.952491  │ 0.389596  │ 0.717698 │ 0.641996  │ 0.0382746 │ 0.045662  │
+## │ 73  │ 0.577692  │ 0.411905  │ 0.92978  │ 0.206136  │ 0.795294  │ 0.0502117 │
+## │ 74  │ 0.833876  │ 0.531344  │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342  │
+## │ 75  │ 0.460094  │ 0.995772  │ 0.596523 │ 0.251823  │ 0.707472  │ 0.494869  │
+## │ 76  │ 0.218739  │ 0.639062  │ 0.759467 │ 0.262545  │ 0.384076  │ 0.443243  │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;In Julia, instead of the syntax &lt;em&gt;condition1 &amp;amp; condition2&lt;/em&gt;, which is more common in
 other programming languages, we use &lt;code&gt;&amp;amp;(condition1, condition2)&lt;/code&gt; or
 &lt;code&gt;|(condition1, condition2)&lt;/code&gt; operators to perform multiple conditional
@@ -664,13 +1009,13 @@ x = DataFrame(rand(3, 5));
 ## Let&amp;#39;s add another line using [dataset1; dataset2] syntax:
 [ x ; DataFrame(rand(1, 5)) ]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 4×5 DataFrame
-## │ Row │ x1       │ x2       │ x3        │ x4       │ x5       │
-## │     │ Float64  │ Float64  │ Float64   │ Float64  │ Float64  │
-## ├─────┼──────────┼──────────┼───────────┼──────────┼──────────┤
-## │ 1   │ 0.157425 │ 0.710204 │ 0.924448  │ 0.835127 │ 0.159928 │
-## │ 2   │ 0.214122 │ 0.431938 │ 0.729077  │ 0.288653 │ 0.169229 │
-## │ 3   │ 0.698713 │ 0.325462 │ 0.0508083 │ 0.642748 │ 0.927367 │
-## │ 4   │ 0.950495 │ 0.483106 │ 0.797683  │ 0.065842 │ 0.363573 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │ x3       │ x4       │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+## │ 1   │ 0.297381 │ 0.885909 │ 0.387813 │ 0.689933 │ 0.267535 │
+## │ 2   │ 0.377971 │ 0.41477  │ 0.505847 │ 0.942796 │ 0.226174 │
+## │ 3   │ 0.914744 │ 0.534709 │ 0.668218 │ 0.616974 │ 0.3377   │
+## │ 4   │ 0.200607 │ 0.451337 │ 0.654558 │ 0.709803 │ 0.421913 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We could get the same result using the &lt;code&gt;vcat()&lt;/code&gt; function. According to the
 documentation, &lt;code&gt;vcat()&lt;/code&gt; performs &lt;em&gt;concatenation along dimension 1&lt;/em&gt;, which means
 it will concatenate rows. The syntax would be:&lt;/p&gt;
@@ -682,13 +1027,13 @@ match exactly.&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Column names matches
 append!(x, DataFrame(rand(1, 5)))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 4×5 DataFrame
-## │ Row │ x1        │ x2       │ x3        │ x4       │ x5       │
-## │     │ Float64   │ Float64  │ Float64   │ Float64  │ Float64  │
-## ├─────┼───────────┼──────────┼───────────┼──────────┼──────────┤
-## │ 1   │ 0.157425  │ 0.710204 │ 0.924448  │ 0.835127 │ 0.159928 │
-## │ 2   │ 0.214122  │ 0.431938 │ 0.729077  │ 0.288653 │ 0.169229 │
-## │ 3   │ 0.698713  │ 0.325462 │ 0.0508083 │ 0.642748 │ 0.927367 │
-## │ 4   │ 0.0661505 │ 0.751949 │ 0.708438  │ 0.966971 │ 0.442506 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │ x3       │ x4        │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64   │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼───────────┼──────────┤
+## │ 1   │ 0.297381 │ 0.885909 │ 0.387813 │ 0.689933  │ 0.267535 │
+## │ 2   │ 0.377971 │ 0.41477  │ 0.505847 │ 0.942796  │ 0.226174 │
+## │ 3   │ 0.914744 │ 0.534709 │ 0.668218 │ 0.616974  │ 0.3377   │
+## │ 4   │ 0.163407 │ 0.877382 │ 0.140744 │ 0.0182456 │ 0.468012 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note that if the column names between two DataFrames do not match , the &lt;code&gt;append!()&lt;/code&gt;
 function is going to throw an error. Although this kind of behavior is important
 when we want to control for possible side effects, we might also prefer to not worry about
@@ -697,14 +1042,14 @@ the &lt;code&gt;push!()&lt;/code&gt; function.&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## providing an Array:
 push!(x, rand(ncol(x)))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 5×5 DataFrame
-## │ Row │ x1        │ x2       │ x3        │ x4       │ x5       │
-## │     │ Float64   │ Float64  │ Float64   │ Float64  │ Float64  │
-## ├─────┼───────────┼──────────┼───────────┼──────────┼──────────┤
-## │ 1   │ 0.157425  │ 0.710204 │ 0.924448  │ 0.835127 │ 0.159928 │
-## │ 2   │ 0.214122  │ 0.431938 │ 0.729077  │ 0.288653 │ 0.169229 │
-## │ 3   │ 0.698713  │ 0.325462 │ 0.0508083 │ 0.642748 │ 0.927367 │
-## │ 4   │ 0.0661505 │ 0.751949 │ 0.708438  │ 0.966971 │ 0.442506 │
-## │ 5   │ 0.443669  │ 0.614479 │ 0.869431  │ 0.612142 │ 0.221037 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │ x3       │ x4        │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64   │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼───────────┼──────────┤
+## │ 1   │ 0.297381 │ 0.885909 │ 0.387813 │ 0.689933  │ 0.267535 │
+## │ 2   │ 0.377971 │ 0.41477  │ 0.505847 │ 0.942796  │ 0.226174 │
+## │ 3   │ 0.914744 │ 0.534709 │ 0.668218 │ 0.616974  │ 0.3377   │
+## │ 4   │ 0.163407 │ 0.877382 │ 0.140744 │ 0.0182456 │ 0.468012 │
+## │ 5   │ 0.304439 │ 0.822608 │ 0.98017  │ 0.248221  │ 0.38893  │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## providing an dictionary:
 push!(x, Dict(:x1 =&amp;gt; rand(),
               :x2 =&amp;gt; rand(),
@@ -712,15 +1057,15 @@ push!(x, Dict(:x1 =&amp;gt; rand(),
               :x4 =&amp;gt; rand(),
               :x5 =&amp;gt; rand()))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 6×5 DataFrame
-## │ Row │ x1        │ x2       │ x3        │ x4       │ x5       │
-## │     │ Float64   │ Float64  │ Float64   │ Float64  │ Float64  │
-## ├─────┼───────────┼──────────┼───────────┼──────────┼──────────┤
-## │ 1   │ 0.157425  │ 0.710204 │ 0.924448  │ 0.835127 │ 0.159928 │
-## │ 2   │ 0.214122  │ 0.431938 │ 0.729077  │ 0.288653 │ 0.169229 │
-## │ 3   │ 0.698713  │ 0.325462 │ 0.0508083 │ 0.642748 │ 0.927367 │
-## │ 4   │ 0.0661505 │ 0.751949 │ 0.708438  │ 0.966971 │ 0.442506 │
-## │ 5   │ 0.443669  │ 0.614479 │ 0.869431  │ 0.612142 │ 0.221037 │
-## │ 6   │ 0.120876  │ 0.900624 │ 0.01759   │ 0.665491 │ 0.399828 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │ x3       │ x4        │ x5       │
+## │     │ Float64  │ Float64  │ Float64  │ Float64   │ Float64  │
+## ├─────┼──────────┼──────────┼──────────┼───────────┼──────────┤
+## │ 1   │ 0.297381 │ 0.885909 │ 0.387813 │ 0.689933  │ 0.267535 │
+## │ 2   │ 0.377971 │ 0.41477  │ 0.505847 │ 0.942796  │ 0.226174 │
+## │ 3   │ 0.914744 │ 0.534709 │ 0.668218 │ 0.616974  │ 0.3377   │
+## │ 4   │ 0.163407 │ 0.877382 │ 0.140744 │ 0.0182456 │ 0.468012 │
+## │ 5   │ 0.304439 │ 0.822608 │ 0.98017  │ 0.248221  │ 0.38893  │
+## │ 6   │ 0.798751 │ 0.432944 │ 0.273067 │ 0.334702  │ 0.164732 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;As we can see, this function also accepts that we give a dictionary or an array
 to append to a DataFrame.&lt;/p&gt;
 &lt;p&gt;So, there are at least 4 methods to add rows to a DataFrame. Which one to use?
@@ -740,113 +1085,113 @@ that we want all columns (or all rows) and/or a sequence of them:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Taking all rows of the first 2 columns:
 foo[:, 1:2]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100×2 DataFrame
-## │ Row │ x1         │ x2        │
-## │     │ Float64    │ Float64   │
-## ├─────┼────────────┼───────────┤
-## │ 1   │ 0.225879   │ 0.192331  │
-## │ 2   │ 0.861597   │ 0.412075  │
-## │ 3   │ 0.160612   │ 0.582893  │
-## │ 4   │ 0.209209   │ 0.811487  │
-## │ 5   │ 0.00261871 │ 0.672612  │
-## │ 6   │ 0.74118    │ 0.0959063 │
-## │ 7   │ 0.499306   │ 0.759537  │
+## │ Row │ x1       │ x2        │
+## │     │ Float64  │ Float64   │
+## ├─────┼──────────┼───────────┤
+## │ 1   │ 0.499939 │ 0.742551  │
+## │ 2   │ 0.188251 │ 0.345847  │
+## │ 3   │ 0.359468 │ 0.517125  │
+## │ 4   │ 0.110961 │ 0.350969  │
+## │ 5   │ 0.852005 │ 0.385833  │
+## │ 6   │ 0.146058 │ 0.020425  │
+## │ 7   │ 0.260548 │ 0.0424126 │
 ## ⋮
-## │ 93  │ 0.222511   │ 0.959517  │
-## │ 94  │ 0.924338   │ 0.346289  │
-## │ 95  │ 0.413875   │ 0.242431  │
-## │ 96  │ 0.12751    │ 0.863311  │
-## │ 97  │ 0.100444   │ 0.688262  │
-## │ 98  │ 0.549415   │ 0.437729  │
-## │ 99  │ 0.691982   │ 0.013449  │
-## │ 100 │ 0.80663    │ 0.942501  │&lt;/code&gt;&lt;/pre&gt;
+## │ 93  │ 0.570397 │ 0.807597  │
+## │ 94  │ 0.562313 │ 0.368488  │
+## │ 95  │ 0.863495 │ 0.250764  │
+## │ 96  │ 0.952491 │ 0.389596  │
+## │ 97  │ 0.577692 │ 0.411905  │
+## │ 98  │ 0.833876 │ 0.531344  │
+## │ 99  │ 0.460094 │ 0.995772  │
+## │ 100 │ 0.218739 │ 0.639062  │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Taking the first 10 rows of all columns:
 foo[1:10, :]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 10×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1         │ x2        │ x3       │ x4        │ x5        │ x6        │
-## │     │ Float64    │ Float64   │ Float64  │ Float64   │ Float64   │ Float64   │
-## ├─────┼────────────┼───────────┼──────────┼───────────┼───────────┼───────────┤
-## │ 1   │ 0.225879   │ 0.192331  │ 0.500367 │ 0.251407  │ 0.966971  │ 0.148842  │
-## │ 2   │ 0.861597   │ 0.412075  │ 0.374348 │ 0.717581  │ 0.214939  │ 0.162007  │
-## │ 3   │ 0.160612   │ 0.582893  │ 0.173025 │ 0.187513  │ 0.55287   │ 0.0112419 │
-## │ 4   │ 0.209209   │ 0.811487  │ 0.627853 │ 0.579644  │ 0.0817368 │ 0.890347  │
-## │ 5   │ 0.00261871 │ 0.672612  │ 0.177489 │ 0.453147  │ 0.522823  │ 0.728632  │
-## │ 6   │ 0.74118    │ 0.0959063 │ 0.156164 │ 0.481103  │ 0.470978  │ 0.242957  │
-## │ 7   │ 0.499306   │ 0.759537  │ 0.596083 │ 0.705406  │ 0.49062   │ 0.0679905 │
-## │ 8   │ 0.576603   │ 0.434151  │ 0.122223 │ 0.557603  │ 0.835961  │ 0.207545  │
-## │ 9   │ 0.989989   │ 0.420554  │ 0.414457 │ 0.0142749 │ 0.339279  │ 0.246284  │
-## │ 10  │ 0.3288     │ 0.993537  │ 0.145196 │ 0.164454  │ 0.233172  │ 0.118441  │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2        │ x3       │ x4        │ x5       │ x6       │
+## │     │ Float64  │ Float64   │ Float64  │ Float64   │ Float64  │ Float64  │
+## ├─────┼──────────┼───────────┼──────────┼───────────┼──────────┼──────────┤
+## │ 1   │ 0.499939 │ 0.742551  │ 0.335877 │ 0.0399392 │ 0.295642 │ 0.492099 │
+## │ 2   │ 0.188251 │ 0.345847  │ 0.233734 │ 0.292812  │ 0.150799 │ 0.209241 │
+## │ 3   │ 0.359468 │ 0.517125  │ 0.153838 │ 0.713083  │ 0.248978 │ 0.300402 │
+## │ 4   │ 0.110961 │ 0.350969  │ 0.778014 │ 0.351215  │ 0.861304 │ 0.276898 │
+## │ 5   │ 0.852005 │ 0.385833  │ 0.909628 │ 0.990282  │ 0.406267 │ 0.23514  │
+## │ 6   │ 0.146058 │ 0.020425  │ 0.537872 │ 0.891749  │ 0.748677 │ 0.264777 │
+## │ 7   │ 0.260548 │ 0.0424126 │ 0.658804 │ 0.53903   │ 0.817064 │ 0.893901 │
+## │ 8   │ 0.295262 │ 0.630972  │ 0.282236 │ 0.825474  │ 0.806538 │ 0.184383 │
+## │ 9   │ 0.96226  │ 0.170932  │ 0.961143 │ 0.163742  │ 0.380657 │ 0.507226 │
+## │ 10  │ 0.659328 │ 0.0869848 │ 0.676368 │ 0.186849  │ 0.834991 │ 0.500298 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Also, we can select a column by using its name as a symbol or using the “.” operator:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## take the column x1 using &amp;quot;.&amp;quot; operator:
 foo.x1&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100-element Array{Float64,1}:
-##  0.22587863967862365  
-##  0.8615972738776234   
-##  0.16061191321201918  
-##  0.2092091082322063   
-##  0.0026187126503134373
-##  0.7411795736753617   
-##  0.4993060131320508   
-##  0.5766030340627664   
-##  0.9899888453975056   
-##  0.3287998197005386   
-##  ⋮                    
-##  0.3252989522369085   
-##  0.22251054582487395  
-##  0.9243383322850598   
-##  0.41387491000153465  
-##  0.1275104153230977   
-##  0.10044387929661469  
-##  0.5494151268643246   
-##  0.6919822123524584   
-##  0.8066300667276938&lt;/code&gt;&lt;/pre&gt;
+##  0.4999394324724453 
+##  0.18825077422455827
+##  0.35946824990407733
+##  0.11096104484537062
+##  0.8520049827478882 
+##  0.14605805532379423
+##  0.2605483842297811 
+##  0.29526221991294443
+##  0.9622597891370834 
+##  0.6593276763255485 
+##  ⋮                  
+##  0.16950320978704414
+##  0.5703965614473467 
+##  0.5623127251298423 
+##  0.8634951795465082 
+##  0.9524907305519463 
+##  0.5776915190775831 
+##  0.8338762255161545 
+##  0.4600936490535428 
+##  0.21873894635031244&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Take the column using &amp;quot;x1&amp;quot; as a symbol:
 foo[:x1]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100-element Array{Float64,1}:
-##  0.22587863967862365  
-##  0.8615972738776234   
-##  0.16061191321201918  
-##  0.2092091082322063   
-##  0.0026187126503134373
-##  0.7411795736753617   
-##  0.4993060131320508   
-##  0.5766030340627664   
-##  0.9899888453975056   
-##  0.3287998197005386   
-##  ⋮                    
-##  0.3252989522369085   
-##  0.22251054582487395  
-##  0.9243383322850598   
-##  0.41387491000153465  
-##  0.1275104153230977   
-##  0.10044387929661469  
-##  0.5494151268643246   
-##  0.6919822123524584   
-##  0.8066300667276938&lt;/code&gt;&lt;/pre&gt;
+##  0.4999394324724453 
+##  0.18825077422455827
+##  0.35946824990407733
+##  0.11096104484537062
+##  0.8520049827478882 
+##  0.14605805532379423
+##  0.2605483842297811 
+##  0.29526221991294443
+##  0.9622597891370834 
+##  0.6593276763255485 
+##  ⋮                  
+##  0.16950320978704414
+##  0.5703965614473467 
+##  0.5623127251298423 
+##  0.8634951795465082 
+##  0.9524907305519463 
+##  0.5776915190775831 
+##  0.8338762255161545 
+##  0.4600936490535428 
+##  0.21873894635031244&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Notice that the return will be an Array. To select one or more column and return
 them as a DataFrame type, we use the double brackets syntax:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;using DataFramesMeta
 ## take column x1 as DataFrame
 @linq foo[[:x1]] |&amp;gt; first(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 5×1 DataFrame
-## │ Row │ x1         │
-## │     │ Float64    │
-## ├─────┼────────────┤
-## │ 1   │ 0.225879   │
-## │ 2   │ 0.861597   │
-## │ 3   │ 0.160612   │
-## │ 4   │ 0.209209   │
-## │ 5   │ 0.00261871 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │
+## │     │ Float64  │
+## ├─────┼──────────┤
+## │ 1   │ 0.499939 │
+## │ 2   │ 0.188251 │
+## │ 3   │ 0.359468 │
+## │ 4   │ 0.110961 │
+## │ 5   │ 0.852005 │&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## Take column x1 an x2:
 @linq foo[[:x1, :x2]] |&amp;gt; first(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 5×2 DataFrame
-## │ Row │ x1         │ x2       │
-## │     │ Float64    │ Float64  │
-## ├─────┼────────────┼──────────┤
-## │ 1   │ 0.225879   │ 0.192331 │
-## │ 2   │ 0.861597   │ 0.412075 │
-## │ 3   │ 0.160612   │ 0.582893 │
-## │ 4   │ 0.209209   │ 0.811487 │
-## │ 5   │ 0.00261871 │ 0.672612 │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ x2       │
+## │     │ Float64  │ Float64  │
+## ├─────┼──────────┼──────────┤
+## │ 1   │ 0.499939 │ 0.742551 │
+## │ 2   │ 0.188251 │ 0.345847 │
+## │ 3   │ 0.359468 │ 0.517125 │
+## │ 4   │ 0.110961 │ 0.350969 │
+## │ 5   │ 0.852005 │ 0.385833 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;There are some new things here. The &lt;code&gt;first()&lt;/code&gt; function aims to just show the first
 lines of our dataset. Similarly, &lt;code&gt;last()&lt;/code&gt; performs the same, but showing us the last
 lines. Also, you may have noticed the use of the &lt;strong&gt;“|&amp;gt;”&lt;/strong&gt; operator. This is the
@@ -889,12 +1234,12 @@ specify in which position we want to add the column in the DataFrame:&lt;/p&gt;
 insertcols!(foo, 2, :new_colum2 =&amp;gt; range(1, step = 0.5, length = nrow(foo)));
 first(foo, 3)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 3×12 DataFrame. Omitted printing of 6 columns
-## │ Row │ x1       │ new_colum2 │ x2       │ x3       │ x4       │ x5       │
-## │     │ Float64  │ Float64    │ Float64  │ Float64  │ Float64  │ Float64  │
-## ├─────┼──────────┼────────────┼──────────┼──────────┼──────────┼──────────┤
-## │ 1   │ 0.225879 │ 1.0        │ 0.192331 │ 0.500367 │ 0.251407 │ 0.966971 │
-## │ 2   │ 0.861597 │ 1.5        │ 0.412075 │ 0.374348 │ 0.717581 │ 0.214939 │
-## │ 3   │ 0.160612 │ 2.0        │ 0.582893 │ 0.173025 │ 0.187513 │ 0.55287  │&lt;/code&gt;&lt;/pre&gt;
+## │ Row │ x1       │ new_colum2 │ x2       │ x3       │ x4        │ x5       │
+## │     │ Float64  │ Float64    │ Float64  │ Float64  │ Float64   │ Float64  │
+## ├─────┼──────────┼────────────┼──────────┼──────────┼───────────┼──────────┤
+## │ 1   │ 0.499939 │ 1.0        │ 0.742551 │ 0.335877 │ 0.0399392 │ 0.295642 │
+## │ 2   │ 0.188251 │ 1.5        │ 0.345847 │ 0.233734 │ 0.292812  │ 0.150799 │
+## │ 3   │ 0.359468 │ 2.0        │ 0.517125 │ 0.153838 │ 0.713083  │ 0.248978 │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note the use of the &lt;strong&gt;“!”&lt;/strong&gt; in &lt;code&gt;insertcols!()&lt;/code&gt; function. This means that the function
 is altering the object in memory rather than in a “virtual copy” that later needs
 to be assigned to a new variable. This is a behavior that can be used in other function
@@ -903,50 +1248,50 @@ as well.&lt;/p&gt;
 Well… it is just as easy as to add it. Just use the &lt;code&gt;deletecols!()&lt;/code&gt; function:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;deletecols!(foo, [:new_column, :new_colum2])&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ x1         │ x2        │ x3       │ x4       │ x5        │ x6        │
-## │     │ Float64    │ Float64   │ Float64  │ Float64  │ Float64   │ Float64   │
-## ├─────┼────────────┼───────────┼──────────┼──────────┼───────────┼───────────┤
-## │ 1   │ 0.225879   │ 0.192331  │ 0.500367 │ 0.251407 │ 0.966971  │ 0.148842  │
-## │ 2   │ 0.861597   │ 0.412075  │ 0.374348 │ 0.717581 │ 0.214939  │ 0.162007  │
-## │ 3   │ 0.160612   │ 0.582893  │ 0.173025 │ 0.187513 │ 0.55287   │ 0.0112419 │
-## │ 4   │ 0.209209   │ 0.811487  │ 0.627853 │ 0.579644 │ 0.0817368 │ 0.890347  │
-## │ 5   │ 0.00261871 │ 0.672612  │ 0.177489 │ 0.453147 │ 0.522823  │ 0.728632  │
-## │ 6   │ 0.74118    │ 0.0959063 │ 0.156164 │ 0.481103 │ 0.470978  │ 0.242957  │
-## │ 7   │ 0.499306   │ 0.759537  │ 0.596083 │ 0.705406 │ 0.49062   │ 0.0679905 │
+## │ Row │ x1       │ x2        │ x3       │ x4        │ x5        │ x6        │
+## │     │ Float64  │ Float64   │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼───────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.499939 │ 0.742551  │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099  │
+## │ 2   │ 0.188251 │ 0.345847  │ 0.233734 │ 0.292812  │ 0.150799  │ 0.209241  │
+## │ 3   │ 0.359468 │ 0.517125  │ 0.153838 │ 0.713083  │ 0.248978  │ 0.300402  │
+## │ 4   │ 0.110961 │ 0.350969  │ 0.778014 │ 0.351215  │ 0.861304  │ 0.276898  │
+## │ 5   │ 0.852005 │ 0.385833  │ 0.909628 │ 0.990282  │ 0.406267  │ 0.23514   │
+## │ 6   │ 0.146058 │ 0.020425  │ 0.537872 │ 0.891749  │ 0.748677  │ 0.264777  │
+## │ 7   │ 0.260548 │ 0.0424126 │ 0.658804 │ 0.53903   │ 0.817064  │ 0.893901  │
 ## ⋮
-## │ 93  │ 0.222511   │ 0.959517  │ 0.433462 │ 0.786266 │ 0.291277  │ 0.752664  │
-## │ 94  │ 0.924338   │ 0.346289  │ 0.289205 │ 0.425046 │ 0.259707  │ 0.248272  │
-## │ 95  │ 0.413875   │ 0.242431  │ 0.102609 │ 0.219121 │ 0.0783962 │ 0.906035  │
-## │ 96  │ 0.12751    │ 0.863311  │ 0.874288 │ 0.993273 │ 0.65365   │ 0.492878  │
-## │ 97  │ 0.100444   │ 0.688262  │ 0.889083 │ 0.508508 │ 0.609194  │ 0.459443  │
-## │ 98  │ 0.549415   │ 0.437729  │ 0.517312 │ 0.862443 │ 0.765236  │ 0.476295  │
-## │ 99  │ 0.691982   │ 0.013449  │ 0.907462 │ 0.430376 │ 0.916992  │ 0.31463   │
-## │ 100 │ 0.80663    │ 0.942501  │ 0.454332 │ 0.778539 │ 0.928999  │ 0.203433  │&lt;/code&gt;&lt;/pre&gt;
+## │ 93  │ 0.570397 │ 0.807597  │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812  │
+## │ 94  │ 0.562313 │ 0.368488  │ 0.506649 │ 0.606263  │ 0.596357  │ 0.587701  │
+## │ 95  │ 0.863495 │ 0.250764  │ 0.215276 │ 0.219656  │ 0.624933  │ 0.732734  │
+## │ 96  │ 0.952491 │ 0.389596  │ 0.717698 │ 0.641996  │ 0.0382746 │ 0.045662  │
+## │ 97  │ 0.577692 │ 0.411905  │ 0.92978  │ 0.206136  │ 0.795294  │ 0.0502117 │
+## │ 98  │ 0.833876 │ 0.531344  │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342  │
+## │ 99  │ 0.460094 │ 0.995772  │ 0.596523 │ 0.251823  │ 0.707472  │ 0.494869  │
+## │ 100 │ 0.218739 │ 0.639062  │ 0.759467 │ 0.262545  │ 0.384076  │ 0.443243  │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now suppose that you do not want to delete a colum, but just change its name.
 For this task, I am afraid there is a very difficult function to remember
 the name: &lt;code&gt;rename()&lt;/code&gt;. The syntax is as follows:&lt;/p&gt;
 &lt;pre class=&#34;julia&#34;&gt;&lt;code&gt;## rename(dataFrame, :old_name =&amp;gt; :new_name)
 rename(foo, :x1 =&amp;gt; :A1, :x2 =&amp;gt; :A2)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## 100×10 DataFrame. Omitted printing of 4 columns
-## │ Row │ A1         │ A2        │ x3       │ x4       │ x5        │ x6        │
-## │     │ Float64    │ Float64   │ Float64  │ Float64  │ Float64   │ Float64   │
-## ├─────┼────────────┼───────────┼──────────┼──────────┼───────────┼───────────┤
-## │ 1   │ 0.225879   │ 0.192331  │ 0.500367 │ 0.251407 │ 0.966971  │ 0.148842  │
-## │ 2   │ 0.861597   │ 0.412075  │ 0.374348 │ 0.717581 │ 0.214939  │ 0.162007  │
-## │ 3   │ 0.160612   │ 0.582893  │ 0.173025 │ 0.187513 │ 0.55287   │ 0.0112419 │
-## │ 4   │ 0.209209   │ 0.811487  │ 0.627853 │ 0.579644 │ 0.0817368 │ 0.890347  │
-## │ 5   │ 0.00261871 │ 0.672612  │ 0.177489 │ 0.453147 │ 0.522823  │ 0.728632  │
-## │ 6   │ 0.74118    │ 0.0959063 │ 0.156164 │ 0.481103 │ 0.470978  │ 0.242957  │
-## │ 7   │ 0.499306   │ 0.759537  │ 0.596083 │ 0.705406 │ 0.49062   │ 0.0679905 │
+## │ Row │ A1       │ A2        │ x3       │ x4        │ x5        │ x6        │
+## │     │ Float64  │ Float64   │ Float64  │ Float64   │ Float64   │ Float64   │
+## ├─────┼──────────┼───────────┼──────────┼───────────┼───────────┼───────────┤
+## │ 1   │ 0.499939 │ 0.742551  │ 0.335877 │ 0.0399392 │ 0.295642  │ 0.492099  │
+## │ 2   │ 0.188251 │ 0.345847  │ 0.233734 │ 0.292812  │ 0.150799  │ 0.209241  │
+## │ 3   │ 0.359468 │ 0.517125  │ 0.153838 │ 0.713083  │ 0.248978  │ 0.300402  │
+## │ 4   │ 0.110961 │ 0.350969  │ 0.778014 │ 0.351215  │ 0.861304  │ 0.276898  │
+## │ 5   │ 0.852005 │ 0.385833  │ 0.909628 │ 0.990282  │ 0.406267  │ 0.23514   │
+## │ 6   │ 0.146058 │ 0.020425  │ 0.537872 │ 0.891749  │ 0.748677  │ 0.264777  │
+## │ 7   │ 0.260548 │ 0.0424126 │ 0.658804 │ 0.53903   │ 0.817064  │ 0.893901  │
 ## ⋮
-## │ 93  │ 0.222511   │ 0.959517  │ 0.433462 │ 0.786266 │ 0.291277  │ 0.752664  │
-## │ 94  │ 0.924338   │ 0.346289  │ 0.289205 │ 0.425046 │ 0.259707  │ 0.248272  │
-## │ 95  │ 0.413875   │ 0.242431  │ 0.102609 │ 0.219121 │ 0.0783962 │ 0.906035  │
-## │ 96  │ 0.12751    │ 0.863311  │ 0.874288 │ 0.993273 │ 0.65365   │ 0.492878  │
-## │ 97  │ 0.100444   │ 0.688262  │ 0.889083 │ 0.508508 │ 0.609194  │ 0.459443  │
-## │ 98  │ 0.549415   │ 0.437729  │ 0.517312 │ 0.862443 │ 0.765236  │ 0.476295  │
-## │ 99  │ 0.691982   │ 0.013449  │ 0.907462 │ 0.430376 │ 0.916992  │ 0.31463   │
-## │ 100 │ 0.80663    │ 0.942501  │ 0.454332 │ 0.778539 │ 0.928999  │ 0.203433  │&lt;/code&gt;&lt;/pre&gt;
+## │ 93  │ 0.570397 │ 0.807597  │ 0.365143 │ 0.377571  │ 0.147421  │ 0.206812  │
+## │ 94  │ 0.562313 │ 0.368488  │ 0.506649 │ 0.606263  │ 0.596357  │ 0.587701  │
+## │ 95  │ 0.863495 │ 0.250764  │ 0.215276 │ 0.219656  │ 0.624933  │ 0.732734  │
+## │ 96  │ 0.952491 │ 0.389596  │ 0.717698 │ 0.641996  │ 0.0382746 │ 0.045662  │
+## │ 97  │ 0.577692 │ 0.411905  │ 0.92978  │ 0.206136  │ 0.795294  │ 0.0502117 │
+## │ 98  │ 0.833876 │ 0.531344  │ 0.407359 │ 0.510575  │ 0.638804  │ 0.376342  │
+## │ 99  │ 0.460094 │ 0.995772  │ 0.596523 │ 0.251823  │ 0.707472  │ 0.494869  │
+## │ 100 │ 0.218739 │ 0.639062  │ 0.759467 │ 0.262545  │ 0.384076  │ 0.443243  │&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We could also add the &lt;strong&gt;“!”&lt;/strong&gt; to the &lt;code&gt;rename()&lt;/code&gt; function to alter the DataFrame
 in memory.&lt;/p&gt;
 &lt;/div&gt;
