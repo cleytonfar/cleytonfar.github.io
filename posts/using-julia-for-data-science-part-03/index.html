@@ -258,16 +258,13 @@ using DataFrames
 df = DataFrame(a = 1:10, b = rand(10), c = rand(10));
 ## Plotting using the @df macro specifying colum names as symbol:
 @df df plot(:a, [:b :c], color = [:red :blue])</code></pre>
-<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-11-J1.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>We can also make a call for <code>@df</code> using the <code>cols()</code> utility function. This function
 allows us to specify the column using a positional index:</p>
 <pre><code>@df df plot(:a, cols(2:3), color = [:red :blue])</code></pre>
 <p><strong>StatsPlots</strong> also contains the <code>corrplot()</code> and <code>cornerplot()</code> functions to plot
 the correlation among input variables:</p>
-<pre class="julia"><code>@df df corrplot(cols(2:3))</code></pre>
-<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J1.png" width="50%" style="display: block; margin: auto;" /></p>
-<pre class="julia"><code>@df df cornerplot(cols(2:3))</code></pre>
-<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-12-J2.png" width="50%" style="display: block; margin: auto;" /></p>
+<pre class="julia"><code>@df df corrplot(cols(2:3))
+@df df cornerplot(cols(2:3))</code></pre>
 <p>Of course, there are more functionalities from the <strong>StatsPlots</strong> library
 than I have showed here. For more detail, please refer to <a href="https://github.com/JuliaPlots/StatsPlots.jl">official documentation</a>.</p>
 </div>
@@ -418,7 +415,7 @@ R&quot;ggplot($gasoline, aes(x = Year, y = LGasPCar, color = Country)) +
         legend.text = element_text(size = 12),
         legend.title=element_text(face = &#39;bold&#39;, size = 12)) +
   labs(title = &#39;Gas Consumption over the years&#39;, x = &#39;&#39;, y = &#39;&#39;)&quot;</code></pre>
-<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-14-15.png" width="50%" style="display: block; margin: auto;" /></p>
+<p><img src="/posts/2019-03-20-using-julia-for-data-science-part-03_files/figure-html/unnamed-chunk-14-12.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>That’s it!!! Now, You do not need to leave <strong>Julia</strong> in order to make your plots with <em>ggplot2</em>.</p>
 </div>
 <div id="conclusion" class="section level1">
